@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import ProductCard from "./ProductCard";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import type { Product, SiteSettings } from "@shared/schema";
 import { Loader2 } from "lucide-react";
 
@@ -16,6 +16,17 @@ export default function FeaturedProducts({ onAddToCart }: FeaturedProductsProps)
   const { data: settings } = useQuery<SiteSettings | undefined>({
     queryKey: ["/api/settings"],
   });
+
+  const [api, setApi] = useState<CarouselApi | undefined>(undefined);
+
+  // Autoplay simple: avanza cada 4s si hay API disponible
+  useEffect(() => {
+    if (!api) return;
+    const interval = setInterval(() => {
+      try { api.scrollNext(); } catch { /* noop */ }
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [api]);
 
   return (
     <section className="py-10 md:py-12">
@@ -40,7 +51,7 @@ export default function FeaturedProducts({ onAddToCart }: FeaturedProductsProps)
           </div>
         ) : (
           <div className="relative">
-            <Carousel opts={{ align: "start", loop: true }}>
+            <Carousel opts={{ align: "start", loop: true }} setApi={setApi}>
               <CarouselContent>
                 {products.map((product) => (
                   <CarouselItem key={product.id} className="basis-[85%] sm:basis-1/2 md:basis-1/3 lg:basis-1/3">
@@ -57,8 +68,8 @@ export default function FeaturedProducts({ onAddToCart }: FeaturedProductsProps)
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="hidden md:flex" />
-              <CarouselNext className="hidden md:flex" />
+              <CarouselPrevious className="hidden md:flex left-2 top-1/2 -translate-y-1/2" />
+              <CarouselNext className="hidden md:flex right-2 top-1/2 -translate-y-1/2" />
             </Carousel>
           </div>
         )}
