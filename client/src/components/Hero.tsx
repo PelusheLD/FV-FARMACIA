@@ -135,7 +135,8 @@ export default function Hero({ carouselData }: HeroProps) {
                 <img
                   src={slides[currentSlide].background || '/fondo.png'}
                   alt="FV Farmacia"
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-cover transform -translate-y-2 md:-translate-y-4"
+                  style={{ objectPosition: 'center 40%' }}
                 />
               </div>
               {/* Tarjeta flotante */}
