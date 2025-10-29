@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import ProductCard from "./ProductCard";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import type { Product, SiteSettings } from "@shared/schema";
 import { Loader2 } from "lucide-react";
 
@@ -38,20 +39,27 @@ export default function FeaturedProducts({ onAddToCart }: FeaturedProductsProps)
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4 md:gap-6">
-            {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                id={product.id}
-                name={product.name}
-                price={product.price}
-                imageUrl={product.imageUrl}
-                measurementType={product.measurementType}
-                stock={product.stock}
-                taxPercentage={settings?.taxPercentage ? parseFloat(settings.taxPercentage) : 16}
-                onAddToCart={(quantity) => onAddToCart(product, quantity)}
-              />
-            ))}
+          <div className="relative">
+            <Carousel opts={{ align: "start", loop: true }}>
+              <CarouselContent>
+                {products.map((product) => (
+                  <CarouselItem key={product.id} className="basis-[85%] sm:basis-1/2 md:basis-1/3 lg:basis-1/3">
+                    <ProductCard
+                      id={product.id}
+                      name={product.name}
+                      price={product.price}
+                      imageUrl={product.imageUrl}
+                      measurementType={product.measurementType}
+                      stock={product.stock}
+                      taxPercentage={settings?.taxPercentage ? parseFloat(settings.taxPercentage) : 16}
+                      onAddToCart={(quantity) => onAddToCart(product, quantity)}
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="hidden md:flex" />
+              <CarouselNext className="hidden md:flex" />
+            </Carousel>
           </div>
         )}
       </div>
