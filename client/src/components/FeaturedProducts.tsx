@@ -55,7 +55,7 @@ export default function FeaturedProducts({ onAddToCart }: FeaturedProductsProps)
             <Carousel opts={{ align: "start", loop: true }} setApi={setApi}>
               <CarouselContent>
                 {products.map((product) => (
-                  <CarouselItem key={product.id} className="basis-[85%] sm:basis-1/2 md:basis-1/3 lg:basis-1/3">
+                  <CarouselItem key={product.id} className="basis-[85%] sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/4">
                     <ProductCard
                       id={product.id}
                       name={product.name}
@@ -69,8 +69,8 @@ export default function FeaturedProducts({ onAddToCart }: FeaturedProductsProps)
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="hidden md:flex left-2 top-1/2 -translate-y-1/2" />
-              <CarouselNext className="hidden md:flex right-2 top-1/2 -translate-y-1/2" />
+              <CarouselPrevious className="hidden md:flex left-3 top-1/2 -translate-y-1/2 z-10" />
+              <CarouselNext className="hidden md:flex right-3 top-1/2 -translate-y-1/2 z-10" />
             </Carousel>
           </div>
         )}
