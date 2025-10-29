@@ -151,7 +151,6 @@ export default function HomePage() {
           <>
             <Hero 
               carouselData={{
-                enableCarousel3: settings?.enableCarousel3 ?? true,
                 title3: settings?.carouselTitle3 ?? undefined,
                 subtitle3: settings?.carouselSubtitle3 ?? undefined,
                 description3: settings?.carouselDescription3 ?? undefined,

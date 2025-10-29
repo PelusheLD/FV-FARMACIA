@@ -47,8 +47,7 @@ export default function AdminSettings() {
       taxPercentage: formData.get('taxPercentage') as string,
       latitude: formData.get('latitude') as string,
       longitude: formData.get('longitude') as string,
-      enableCarousel3: formData.get('enableCarousel3') === 'on',
-      // Carrusel Hero (solo FV FARMACIA)
+      // Vista principal (solo FV FARMACIA)
       carouselTitle3: (formData.get('carouselTitle3') as string) || undefined,
       carouselSubtitle3: (formData.get('carouselSubtitle3') as string) || undefined,
       carouselDescription3: (formData.get('carouselDescription3') as string) || undefined,
@@ -300,24 +299,15 @@ export default function AdminSettings() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Carrusel Hero</CardTitle>
-            <CardDescription>Configura la vista principal de FV FARMACIA</CardDescription>
+            <CardTitle>Vista principal</CardTitle>
+            <CardDescription>Configura la sección principal de FV FARMACIA</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
 
             {/* Vista 3 - FV FARMACIA */}
             <div className="space-y-4 p-4 border rounded-lg">
               <div className="flex items-center justify-between">
-                <h4 className="font-semibold text-lg">Vista 3 - FV FARMACIA</h4>
-                <div className="flex items-center gap-2">
-                  <Label htmlFor="enableCarousel3" className="text-sm">Habilitar</Label>
-                  <Switch
-                    id="enableCarousel3"
-                    name="enableCarousel3"
-                    defaultChecked={settings?.enableCarousel3 ?? true}
-                    data-testid="switch-enable-carousel-3"
-                  />
-                </div>
+                <h4 className="font-semibold text-lg">Vista principal - FV FARMACIA</h4>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
