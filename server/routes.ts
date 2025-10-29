@@ -367,11 +367,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       console.log("Settings update request body:", req.body);
       
-      // Verificar si los campos del carrusel están presentes
+      // Verificar campos del carrusel (solo Farmacia)
       const carouselFields = [
-        'carouselTitle1', 'carouselSubtitle1', 'carouselDescription1', 'carouselImage1',
-        'carouselTitle2', 'carouselSubtitle2', 'carouselDescription2', 'carouselImage2',
-        'carouselTitle3', 'carouselSubtitle3', 'carouselDescription3', 'carouselImage3'
+        'carouselTitle3', 'carouselSubtitle3', 'carouselDescription3',
+        'carouselBackground3', 'carouselButton3', 'carouselUrl3'
       ];
       
       console.log("Carousel fields present:", carouselFields.map(field => ({
