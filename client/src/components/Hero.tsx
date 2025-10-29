@@ -1,4 +1,4 @@
-import { ArrowDown, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
+import { ArrowRight, ShieldCheck, Clock, Stethoscope, ExternalLink, Phone } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -33,30 +33,21 @@ interface HeroProps {
 }
 
 export default function Hero({ carouselData }: HeroProps) {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  
-  // Datos del carrusel con valores por defecto
-  const allSlides = [
+  const [currentSlide] = useState(0);
+  // Contenido base del hero (no-carrusel) totalmente nuevo
+  const slides = [
     {
       title: carouselData?.title3 || "FV FARMACIA",
       subtitle: carouselData?.subtitle3 || "Tu farmacia de confianza",
-      description: carouselData?.description3 || "Medicamentos, cuidado personal y bienestar. Atención cercana y precios justos.",
+      description:
+        carouselData?.description3 ||
+        "Medicamentos, cuidado personal y bienestar. Atención cercana y precios justos.",
       image: carouselData?.image3,
       background: carouselData?.background3,
       buttonText: carouselData?.button3 || "Ir a Farmacia",
       buttonUrl: carouselData?.url3,
-      enabled: true,
-    }
+    },
   ];
-
-  // Filtrar solo los slides habilitados
-  const enabledSlides = allSlides.filter(slide => slide.enabled);
-  
-  // Verificar si hay slides habilitados
-  const hasEnabledSlides = enabledSlides.length > 0;
-  
-  // Si no hay slides habilitados, usar el primer slide como fallback
-  const slides = hasEnabledSlides ? enabledSlides : [allSlides[0]];
 
   // Función para manejar clics de botones
   const handleButtonClick = useCallback((slideIndex: number) => {
@@ -78,135 +69,94 @@ export default function Hero({ carouselData }: HeroProps) {
     }
   }, [slides]);
 
-  // Debug: mostrar datos del carrusel
-  console.log('🎠 Hero carouselData:', carouselData);
-  console.log('🎯 Slide actual:', currentSlide + 1, 'de', slides.length);
-  console.log('📊 Datos del slide actual:', slides[currentSlide]);
-
-  // Rotación automática cada 10 segundos (solo si hay más de un slide habilitado)
-  useEffect(() => {
-    if (slides.length <= 1) return;
-    
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 10000);
-
-    return () => clearInterval(interval);
-  }, [slides.length]);
-
-  const goToSlide = (index: number) => {
-    if (slides.length <= 1) return;
-    console.log('🔄 Cambiando a slide:', index + 1, 'de', slides.length);
-    setCurrentSlide(index);
-  };
-
-  const goToPrevious = () => {
-    if (slides.length <= 1) return;
-    const newSlide = (currentSlide - 1 + slides.length) % slides.length;
-    console.log('⬅️ Slide anterior:', newSlide + 1, 'de', slides.length);
-    setCurrentSlide(newSlide);
-  };
-
-  const goToNext = () => {
-    if (slides.length <= 1) return;
-    const newSlide = (currentSlide + 1) % slides.length;
-    console.log('➡️ Slide siguiente:', newSlide + 1, 'de', slides.length);
-    setCurrentSlide(newSlide);
-  };
+  // Fondo y layout nuevos, sin carrusel
   return (
-    <div className="relative h-[80vh] md:h-[90vh] overflow-hidden">
-      {/* Fondo dinámico con imagen y blur */}
-      <div
-        className="absolute inset-0 transition-all duration-1000"
-        style={{
-          backgroundImage: `url(${slides[currentSlide].background || '/fondo.png'})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center 50%',
-          filter: 'blur(4px)',
-          transform: 'scale(1.04)',
-        }}
-      />
-      {/* Overlay con tinte verde farmacia para atmósfera limpia */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[rgba(41,160,59,0.65)] via-[rgba(20,20,20,0.55)] to-[rgba(0,0,0,0.65)]" />
-      
-      {/* Contenido del carrusel */}
-      <div className="relative h-full flex flex-col items-center justify-center px-4 text-center">
-        {/* Slide actual del carrusel */}
-        <div className="relative w-full max-w-4xl">
-          <div className="flex flex-col items-center justify-center transition-opacity duration-1000">
-            {/* Imagen del carrusel */}
-            {slides[currentSlide].image && (
-              <div className="mb-6">
-                <img
-                  src={slides[currentSlide].image}
-                  alt={slides[currentSlide].title}
-                  className="w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full object-cover border-4 border-white/20 shadow-2xl"
-                />
-              </div>
-            )}
-            
-            <h1 className="font-display font-bold text-3xl md:text-5xl lg:text-6xl mb-4 text-white text-center">
+    <section className="relative overflow-hidden">
+      {/* Capa base con gradientes suaves en verde */}
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/20 via-white to-emerald-50" />
+      {/* Radiales decorativas */}
+      <div className="pointer-events-none absolute -top-24 -left-24 h-80 w-80 rounded-full bg-emerald-200/40 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-emerald-300/30 blur-3xl" />
+
+      <div className="relative max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-16 md:py-24">
+        <div className="grid md:grid-cols-2 gap-10 items-center">
+          {/* Columna izquierda: contenido */}
+          <div>
+            <span className="inline-flex items-center gap-2 rounded-full bg-emerald-100 text-emerald-800 px-3 py-1 text-xs font-semibold">
+              <ShieldCheck className="h-4 w-4" /> Servicio farmacéutico certificado
+            </span>
+            <h1 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl mt-4 text-gray-900 leading-tight">
               {slides[currentSlide].title}
-        </h1>
-            <p className="text-lg md:text-xl text-gray-100/95 mb-2 max-w-2xl text-center">
+            </h1>
+            <p className="text-emerald-700/90 text-lg md:text-xl mt-3">
               {slides[currentSlide].subtitle}
             </p>
-            <p className="text-base md:text-lg text-gray-100/85 mb-6 max-w-3xl text-center">
+            <p className="text-gray-600 text-base md:text-lg mt-4 max-w-xl">
               {slides[currentSlide].description}
             </p>
-            
-            {/* Botón Ir al Sitio */}
-          <Button 
-              id={`carousel-button-${currentSlide + 1}`}
-              onClick={() => handleButtonClick(currentSlide)}
-            size="lg"
-              className="bg-[#29a03b] hover:bg-[#238a33] text-white font-semibold px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-              data-testid={`carousel-button-${currentSlide + 1}`}
-            >
-              <ExternalLink className="h-5 w-5 mr-2" />
-              {slides[currentSlide].buttonText}
-          </Button>
+
+            {/* Badges de beneficios */}
+            <div className="mt-6 flex flex-wrap gap-3">
+              <div className="inline-flex items-center gap-2 rounded-md bg-white shadow-sm ring-1 ring-gray-200 px-3 py-2 text-sm text-gray-700">
+                <Clock className="h-4 w-4 text-emerald-600" /> Entrega rápida
+              </div>
+              <div className="inline-flex items-center gap-2 rounded-md bg-white shadow-sm ring-1 ring-gray-200 px-3 py-2 text-sm text-gray-700">
+                <Stethoscope className="h-4 w-4 text-emerald-600" /> Atención farmacéutica
+              </div>
+              <div className="inline-flex items-center gap-2 rounded-md bg-white shadow-sm ring-1 ring-gray-200 px-3 py-2 text-sm text-gray-700">
+                <ShieldCheck className="h-4 w-4 text-emerald-600" /> Productos garantizados
+              </div>
+            </div>
+
+            {/* CTAs */}
+            <div className="mt-8 flex flex-col sm:flex-row gap-3">
+              <Button
+                id={`hero-primary-${currentSlide + 1}`}
+                onClick={() => handleButtonClick(currentSlide)}
+                size="lg"
+                className="bg-[#29a03b] hover:bg-[#238a33] text-white font-semibold px-6"
+                data-testid={`hero-primary-${currentSlide + 1}`}
+              >
+                <ExternalLink className="h-5 w-5 mr-2" /> {slides[currentSlide].buttonText}
+              </Button>
+              <a
+                href="#categories"
+                className="inline-flex items-center justify-center rounded-lg border border-emerald-300 bg-white px-6 py-3 text-emerald-800 font-semibold hover:bg-emerald-50 transition"
+              >
+                Ver categorías <ArrowRight className="ml-2 h-4 w-4" />
+              </a>
+            </div>
+          </div>
+
+          {/* Columna derecha: composición con imagen */}
+          <div className="relative hidden md:block">
+            <div className="relative ml-auto w-[92%] max-w-lg">
+              <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl ring-1 ring-emerald-400/20">
+                <img
+                  src={slides[currentSlide].background || '/fondo.png'}
+                  alt="FV Farmacia"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              {/* Tarjeta flotante */}
+              <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-lg ring-1 ring-gray-200 p-4 flex items-center gap-3">
+                <Phone className="h-5 w-5 text-emerald-600" />
+                <div className="text-sm">
+                  <p className="font-semibold text-gray-900">Atención al cliente</p>
+                  <p className="text-gray-600">Asesoría para tus compras</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        
-        
-        {/* Controles del carrusel - Solo se muestran si hay más de un slide habilitado */}
-        {slides.length > 1 && (
-          <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 flex items-center gap-4">
-            {/* Botón anterior */}
-            <button
-              onClick={goToPrevious}
-              className="p-2 rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors"
-              aria-label="Slide anterior"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            
-            {/* Indicadores de slides */}
-            <div className="flex gap-2">
-              {slides.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-colors ${
-                    index === currentSlide ? 'bg-white' : 'bg-white/40'
-                  }`}
-                  aria-label={`Ir al slide ${index + 1}`}
-                />
-              ))}
-            </div>
-            
-            {/* Botón siguiente */}
-            <button
-              onClick={goToNext}
-              className="p-2 rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors"
-              aria-label="Slide siguiente"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
-          </div>
-        )}
       </div>
-    </div>
+
+      {/* Separador ondulado */}
+      <div className="relative">
+        <svg className="w-full h-10 text-emerald-600/20" viewBox="0 0 1440 80" preserveAspectRatio="none" fill="currentColor">
+          <path d="M0,64L48,64C96,64,192,64,288,64C384,64,480,64,576,53.3C672,43,768,21,864,16C960,11,1056,21,1152,26.7C1248,32,1344,32,1392,32L1440,32L1440,80L1392,80C1344,80,1248,80,1152,80C1056,80,960,80,864,80C768,80,672,80,576,80C480,80,384,80,288,80C192,80,96,80,48,80L0,80Z" />
+        </svg>
+      </div>
+    </section>
   );
 }
