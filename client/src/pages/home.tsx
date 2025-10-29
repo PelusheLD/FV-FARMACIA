@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import ContactSection from "@/components/ContactSection";
 import MultimediaSection from "@/components/MultimediaSection";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import { useToast } from "@/hooks/use-toast";
 import { searchProducts } from "@/lib/searchUtils";
@@ -212,6 +213,9 @@ export default function HomePage() {
         onCheckout={handleCheckout}
       />
     </div>
+
+      {/* Botón flotante de WhatsApp */}
+      <WhatsAppButton />
       </div>
     </CurrencyProvider>
   );
