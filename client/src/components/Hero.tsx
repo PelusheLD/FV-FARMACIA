@@ -130,13 +130,13 @@ export default function Hero({ carouselData }: HeroProps) {
 
           {/* Columna derecha: composición con imagen */}
           <div className="relative hidden md:block">
-            <div className="relative ml-auto w-[92%] max-w-lg">
+            <div className="relative ml-auto w-[86%] max-w-md">
               <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl ring-1 ring-emerald-400/20">
                 <img
                   src={slides[currentSlide].background || '/fondo.png'}
                   alt="FV Farmacia"
-                  className="h-full w-full object-cover transform -translate-y-2 md:-translate-y-4"
-                  style={{ objectPosition: 'center 40%' }}
+                  className="h-full w-full object-cover transform -translate-y-6 md:-translate-y-10"
+                  style={{ objectPosition: 'center 30%' }}
                 />
               </div>
               {/* Tarjeta flotante */}
