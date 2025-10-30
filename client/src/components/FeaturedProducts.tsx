@@ -55,7 +55,7 @@ export default function FeaturedProducts({ onAddToCart }: FeaturedProductsProps)
             <Carousel className="relative" opts={{ align: "start", loop: true }} setApi={setApi}>
               <CarouselContent>
                 {products.map((product) => (
-                  <CarouselItem key={product.id} className="basis-[85%] sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/4">
+                  <CarouselItem key={product.id} className="basis-[85%] sm:basis-1/2 md:basis-1/3 lg:basis-[22.5%] xl:basis-[22.5%]">
                     <ProductCard
                       id={product.id}
                       name={product.name}
