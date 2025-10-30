@@ -1,7 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Product, SiteSettings } from "@shared/schema";
 import { Loader2 } from "lucide-react";
 
@@ -69,8 +71,14 @@ export default function FeaturedProducts({ onAddToCart }: FeaturedProductsProps)
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="hidden md:flex absolute left-2 md:-left-4 top-1/2 -translate-y-1/2 z-20 shadow bg-white/90 hover:bg-white" />
-              <CarouselNext className="hidden md:flex absolute right-2 md:-right-4 top-1/2 -translate-y-1/2 z-20 shadow bg-white/90 hover:bg-white" />
+              <div className="mt-4 flex justify-center gap-3">
+                <Button variant="outline" size="icon" onClick={() => api?.scrollPrev()} aria-label="Anterior">
+                  <ArrowLeft />
+                </Button>
+                <Button variant="outline" size="icon" onClick={() => api?.scrollNext()} aria-label="Siguiente">
+                  <ArrowRight />
+                </Button>
+              </div>
             </Carousel>
           </div>
         )}
