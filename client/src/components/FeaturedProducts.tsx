@@ -69,8 +69,8 @@ export default function FeaturedProducts({ onAddToCart }: FeaturedProductsProps)
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="hidden md:flex left-1 md:-left-4 top-1/2 -translate-y-1/2 z-20 shadow bg-white/90 hover:bg-white" />
-              <CarouselNext className="hidden md:flex right-1 md:-right-4 top-1/2 -translate-y-1/2 z-20 shadow bg-white/90 hover:bg-white" />
+              <CarouselPrevious className="hidden md:flex absolute left-2 md:-left-4 top-1/2 -translate-y-1/2 z-20 shadow bg-white/90 hover:bg-white" />
+              <CarouselNext className="hidden md:flex absolute right-2 md:-right-4 top-1/2 -translate-y-1/2 z-20 shadow bg-white/90 hover:bg-white" />
             </Carousel>
           </div>
         )}
