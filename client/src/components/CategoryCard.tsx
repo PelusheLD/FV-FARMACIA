@@ -13,7 +13,7 @@ export default function CategoryCard({ name, imageUrl, icon: Icon, leySeca = fal
   return (
     <Card
       onClick={onClick}
-      className="group h-48 md:h-52 flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-2 bg-gradient-to-br from-white via-green-50/30 to-white border border-green-200/50 hover:border-[#29a03b] hover:shadow-[#29a03b]/10 p-6 relative overflow-hidden"
+      className="group h-48 md:h-52 flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-2 bg-gradient-to-br from-white via-green-50/30 to-white border border-green-200/50 hover:border-[#29a03b] hover:shadow-[#29a03b]/10 p-6 relative overflow-visible"
       data-testid={`card-category-${name.toLowerCase().replace(/\s+/g, '-')}`}
     >
       {/* Patrón de fondo decorativo */}
@@ -74,7 +74,7 @@ export default function CategoryCard({ name, imageUrl, icon: Icon, leySeca = fal
       
       {/* ECG Superior */}
       <svg
-        className="absolute top-0 left-0 right-0 h-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        className="absolute -top-1 left-0 right-0 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         viewBox="0 0 200 20"
         preserveAspectRatio="none"
         fill="none"
@@ -83,17 +83,11 @@ export default function CategoryCard({ name, imageUrl, icon: Icon, leySeca = fal
         <path
           d="M 0 10 L 20 10 L 25 5 L 30 10 L 35 15 L 40 10 L 50 10 L 55 5 L 60 10 L 65 15 L 70 10 L 80 10 L 85 3 L 90 10 L 95 17 L 100 10 L 120 10 L 125 5 L 130 10 L 135 15 L 140 10 L 150 10 L 155 5 L 160 10 L 165 15 L 170 10 L 180 10 L 185 3 L 190 10 L 200 10"
           stroke="#29a03b"
-          strokeWidth="2"
+          strokeWidth="2.5"
           strokeLinecap="round"
           vectorEffect="non-scaling-stroke"
         />
       </svg>
-      
-      {/* Indicador de hover izquierdo */}
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-[#29a03b] group-hover:h-12 transition-all duration-300 rounded-full opacity-0 group-hover:opacity-100" />
-      
-      {/* Indicador de hover derecho */}
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-[#29a03b] group-hover:h-12 transition-all duration-300 rounded-full opacity-0 group-hover:opacity-100" />
     </Card>
   );
 }
