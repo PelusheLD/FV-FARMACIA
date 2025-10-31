@@ -77,34 +77,17 @@ export default function CategoryGrid({ categories, onCategorySelect, onSearch }:
             <p className="text-gray-500 text-lg">No hay categorías disponibles</p>
           </div>
         ) : (
-          <div className="relative py-4">
-            {/* Línea ECG superior del grid */}
-            <div className="pointer-events-none absolute -top-2 left-0 right-0 h-3 opacity-90">
-              <svg viewBox="0 0 100 16" preserveAspectRatio="none" className="w-full h-full">
-                <path d="M0 8 L18 8 L22 4 L26 12 L30 2 L34 8 L50 8 L54 4 L58 12 L62 2 L66 8 L82 8 L86 4 L90 12 L94 2 L98 8 L100 8" stroke="#29a03b" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-
-            {/* Contenido del grid */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 md:gap-8">
-              {categories.map((category) => (
-                <CategoryCard
-                  key={category.id}
-                  name={category.name}
-                  imageUrl={category.imageUrl || undefined}
-                  icon={iconMap.ShoppingBasket}
-                  leySeca={category.leySeca || false}
-                  onClick={() => onCategorySelect(category.id, category.name)}
-                />
-              ))}
-            </div>
-
-            {/* Línea ECG inferior del grid */}
-            <div className="pointer-events-none absolute -bottom-2 left-0 right-0 h-3 opacity-90">
-              <svg viewBox="0 0 100 16" preserveAspectRatio="none" className="w-full h-full">
-                <path d="M0 8 L18 8 L22 4 L26 12 L30 2 L34 8 L50 8 L54 4 L58 12 L62 2 L66 8 L82 8 L86 4 L90 12 L94 2 L98 8 L100 8" stroke="#29a03b" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 md:gap-8 rounded-xl border border-green-200/50 p-3">
+            {categories.map((category) => (
+              <CategoryCard
+                key={category.id}
+                name={category.name}
+                imageUrl={category.imageUrl || undefined}
+                icon={iconMap.ShoppingBasket}
+                leySeca={category.leySeca || false}
+                onClick={() => onCategorySelect(category.id, category.name)}
+              />
+            ))}
           </div>
         )}
       </div>
