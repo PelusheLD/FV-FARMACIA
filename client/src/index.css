@@ -365,3 +365,17 @@ iframe {
 .hover\:scale-102:hover {
   transform: scale(1.02);
 }
+
+/* Animación de gradiente para títulos */
+@keyframes gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  animation: gradient 3s ease infinite;
+}

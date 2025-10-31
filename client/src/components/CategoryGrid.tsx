@@ -24,11 +24,15 @@ export default function CategoryGrid({ categories, onCategorySelect, onSearch }:
   return (
     <section id="categories" className="py-12 md:py-16 bg-gradient-to-b from-gray-50/50 to-white">
       <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-        <div className="text-center mb-10 md:mb-12">
-          <h2 className="font-display font-bold text-3xl md:text-4xl mb-3 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
-            Categorías
-          </h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-6">
+        <div className="text-center mb-12 md:mb-16">
+          <div className="inline-flex items-center gap-3 mb-4">
+            <div className="h-1 w-16 bg-gradient-to-r from-transparent to-[#29a03b] rounded-full" />
+            <h2 className="font-display font-bold text-4xl md:text-5xl mb-0 bg-gradient-to-r from-[#29a03b] via-[#22c55e] to-[#29a03b] bg-clip-text text-transparent animate-gradient bg-[length:200%_100%]">
+              Categorías
+            </h2>
+            <div className="h-1 w-16 bg-gradient-to-l from-transparent to-[#29a03b] rounded-full" />
+          </div>
+          <p className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto mb-8 font-medium">
             Explora nuestra amplia variedad de productos organizados por categorías
           </p>
           
