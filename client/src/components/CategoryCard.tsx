@@ -71,19 +71,7 @@ export default function CategoryCard({ name, imageUrl, icon: Icon, leySeca = fal
         </div>
       </div>
       
-      {/* Línea ECG superior */}
-      <div className="absolute top-0 left-0 right-0 h-3 opacity-80 group-hover:opacity-100 transition-opacity duration-300">
-        <svg viewBox="0 0 100 16" preserveAspectRatio="none" className="w-full h-full">
-          <path d="M0 8 L20 8 L25 4 L30 12 L35 2 L40 8 L55 8 L60 4 L65 12 L70 2 L75 8 L100 8" stroke="#29a03b" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </div>
-
-      {/* Línea ECG inferior */}
-      <div className="absolute bottom-0 left-0 right-0 h-3 opacity-80 group-hover:opacity-100 transition-opacity duration-300">
-        <svg viewBox="0 0 100 16" preserveAspectRatio="none" className="w-full h-full">
-          <path d="M0 8 L20 8 L25 4 L30 12 L35 2 L40 8 L55 8 L60 4 L65 12 L70 2 L75 8 L100 8" stroke="#29a03b" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </div>
+      
       
       {/* Indicador de hover izquierdo */}
       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-[#29a03b] group-hover:h-12 transition-all duration-300 rounded-full opacity-0 group-hover:opacity-100" />
