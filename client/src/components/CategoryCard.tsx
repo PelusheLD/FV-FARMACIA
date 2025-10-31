@@ -13,7 +13,7 @@ export default function CategoryCard({ name, imageUrl, icon: Icon, leySeca = fal
   return (
     <Card
       onClick={onClick}
-      className="group h-48 md:h-52 flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-2 bg-gradient-to-br from-white via-green-50/30 to-white border border-green-200/50 hover:border-[#29a03b] hover:shadow-[#29a03b]/10 p-6 relative overflow-visible"
+      className="group h-48 md:h-52 flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-2 bg-gradient-to-br from-white via-green-50/30 to-white border border-green-200/50 hover:shadow-[#29a03b]/10 p-6 relative overflow-visible"
       data-testid={`card-category-${name.toLowerCase().replace(/\s+/g, '-')}`}
     >
       {/* Patrón de fondo decorativo */}
