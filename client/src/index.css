@@ -379,3 +379,19 @@ iframe {
 .animate-gradient {
   animation: gradient 3s ease infinite;
 }
+
+/* Animación de ECG (electrocardiograma) */
+@keyframes ecg-beat {
+  0%, 100% {
+    opacity: 0.6;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1.3);
+  }
+}
+
+.ecg-animate {
+  animation: ecg-beat 1.5s ease-in-out infinite;
+}

@@ -72,8 +72,39 @@ export default function CategoryCard({ name, imageUrl, icon: Icon, leySeca = fal
         </div>
       </div>
       
-      {/* Línea decorativa inferior */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#29a03b]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      {/* ECG Superior */}
+      <svg
+        className="absolute top-0 left-0 right-0 h-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ecg-animate"
+        viewBox="0 0 200 20"
+        preserveAspectRatio="none"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M 0 10 L 20 10 L 25 5 L 30 10 L 35 15 L 40 10 L 50 10 L 55 5 L 60 10 L 65 15 L 70 10 L 80 10 L 85 3 L 90 10 L 95 17 L 100 10 L 120 10 L 125 5 L 130 10 L 135 15 L 140 10 L 150 10 L 155 5 L 160 10 L 165 15 L 170 10 L 180 10 L 185 3 L 190 10 L 200 10"
+          stroke="#ef4444"
+          strokeWidth="2"
+          strokeLinecap="round"
+          vectorEffect="non-scaling-stroke"
+        />
+      </svg>
+      
+      {/* ECG Inferior */}
+      <svg
+        className="absolute bottom-0 left-0 right-0 h-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ecg-animate"
+        viewBox="0 0 200 20"
+        preserveAspectRatio="none"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M 0 10 L 20 10 L 25 5 L 30 10 L 35 15 L 40 10 L 50 10 L 55 5 L 60 10 L 65 15 L 70 10 L 80 10 L 85 3 L 90 10 L 95 17 L 100 10 L 120 10 L 125 5 L 130 10 L 135 15 L 140 10 L 150 10 L 155 5 L 160 10 L 165 15 L 170 10 L 180 10 L 185 3 L 190 10 L 200 10"
+          stroke="#ef4444"
+          strokeWidth="2"
+          strokeLinecap="round"
+          vectorEffect="non-scaling-stroke"
+        />
+      </svg>
       
       {/* Indicador de hover izquierdo */}
       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-[#29a03b] group-hover:h-12 transition-all duration-300 rounded-full opacity-0 group-hover:opacity-100" />
