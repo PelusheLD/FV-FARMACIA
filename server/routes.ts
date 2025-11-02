@@ -341,25 +341,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const settings = await storage.getSiteSettings();
       
+      console.log('🔍 Instagram API Request - Checking settings...');
+      console.log('Token exists:', !!settings?.instagramAccessToken);
+      console.log('Token length:', settings?.instagramAccessToken?.length || 0);
+      
       if (!settings?.instagramAccessToken) {
+        console.warn('⚠️ No Instagram access token found in settings');
         return res.json([]);
       }
 
+      const apiUrl = `https://graph.instagram.com/me/media?fields=id,media_type,media_url,permalink,caption,timestamp,thumbnail_url,like_count,comments_count&limit=4&access_token=${settings.instagramAccessToken}`;
+      console.log('📡 Fetching Instagram posts from:', 'https://graph.instagram.com/me/media?...');
+
       // Fetch Instagram posts using the access token
-      const response = await fetch(
-        `https://graph.instagram.com/me/media?fields=id,media_type,media_url,permalink,caption,timestamp,thumbnail_url,like_count,comments_count&limit=4&access_token=${settings.instagramAccessToken}`
-      );
+      const response = await fetch(apiUrl);
 
       if (!response.ok) {
-        console.error('Instagram API error:', response.status, response.statusText);
-        return res.json([]);
+        const errorText = await response.text();
+        console.error('❌ Instagram API error:', response.status, response.statusText);
+        console.error('Error details:', errorText);
+        return res.status(response.status).json({ 
+          error: 'Instagram API error', 
+          status: response.status,
+          message: errorText 
+        });
       }
 
       const data = await response.json();
+      console.log('✅ Instagram API response - Posts found:', data.data?.length || 0);
+      
+      if (!data.data || data.data.length === 0) {
+        console.warn('⚠️ No posts returned from Instagram API');
+      }
+      
       res.json(data.data || []);
     } catch (error) {
-      console.error('Error fetching Instagram posts:', error);
-      res.json([]);
+      console.error('❌ Error fetching Instagram posts:', error);
+      if (error instanceof Error) {
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+      }
+      res.status(500).json({ 
+        error: 'Failed to fetch Instagram posts',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
     }
   });
 
