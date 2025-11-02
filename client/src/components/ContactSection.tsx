@@ -50,13 +50,7 @@ export default function ContactSection() {
   const longitude = parseFloat(settings.longitude || '-69.20519760343741');
 
   return (
-    <section id="contacto" className="py-16 bg-gradient-to-br from-green-50 via-white to-green-50 relative overflow-hidden">
-      {/* Elementos decorativos de fondo sutiles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-10 left-10 w-64 h-64 bg-[#29a03b] rounded-full blur-3xl opacity-3"></div>
-        <div className="absolute bottom-10 right-10 w-64 h-64 bg-green-300 rounded-full blur-3xl opacity-3"></div>
-      </div>
-
+    <section id="contacto" className="py-16 bg-white relative overflow-hidden">
       <div className="container mx-auto px-4 relative z-10 max-w-7xl">
         {/* Layout: Imagen izquierda, Mapa derecha */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
@@ -65,7 +59,7 @@ export default function ContactSection() {
             <img 
               src="/ubicacion.png" 
               alt="Nuestra Ubicación" 
-              className="w-full h-auto rounded-2xl shadow-xl object-contain"
+              className="w-full h-auto rounded-2xl object-contain animate-float"
             />
           </div>
 
