@@ -52,6 +52,21 @@ export default function ContactSection() {
   return (
     <section id="contacto" className="py-16 bg-white relative overflow-hidden">
       <div className="container mx-auto px-4 relative z-10 max-w-7xl">
+        {/* Encabezado de la sección */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center gap-3 mb-4">
+            <div className="bg-gradient-to-br from-[#29a03b] to-green-600 p-3 rounded-2xl shadow-lg">
+              <MapPin className="h-8 w-8 text-white" />
+            </div>
+            <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900">
+              Nuestra Ubicación
+            </h2>
+          </div>
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            Encuéntranos fácilmente y visítanos cuando necesites atención farmacéutica
+          </p>
+        </div>
+
         {/* Layout: Imagen izquierda, Mapa derecha */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           {/* Columna Izquierda - Imagen */}
