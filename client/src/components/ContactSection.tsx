@@ -199,7 +199,9 @@ export default function ContactSection() {
               
               {/* Contenedor del mapa */}
               <div className="relative z-20 bg-white p-8 rounded-3xl shadow-2xl border-4 border-green-200">
-                <ContactMap latitude={latitude} longitude={longitude} />
+                <div className="h-[500px]">
+                  <ContactMap latitude={latitude} longitude={longitude} />
+                </div>
                 
                 {/* Elementos decorativos flotantes inspirados en la imagen */}
                 <div className="absolute inset-0 pointer-events-none z-30">
