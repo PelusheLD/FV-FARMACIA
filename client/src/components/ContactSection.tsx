@@ -61,11 +61,11 @@ export default function ContactSection() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           {/* Imagen flotante (más pequeña) */}
-          <div className="relative flex justify-center lg:justify-start">
+          <div className="relative flex justify-center">
             <img
               src="/ubicacion.png"
               alt="Nuestra Ubicación"
-              className="w-11/12 lg:w-5/6 max-w-xl h-auto rounded-2xl object-contain animate-float"
+              className="w-11/12 lg:w-5/6 max-w-xl h-auto rounded-2xl object-contain animate-float-slow mx-auto"
             />
           </div>
 

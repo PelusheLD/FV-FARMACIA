@@ -393,3 +393,8 @@ iframe {
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
+
+/* Versión lenta de la animación de flotación */
+.animate-float-slow {
+  animation: float 6s ease-in-out infinite;
+}
