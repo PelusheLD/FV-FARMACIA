@@ -65,7 +65,7 @@ export default function ContactSection() {
             <img
               src="/ubicacion.png"
               alt="Nuestra Ubicación"
-              className="w-3/4 max-w-md h-auto rounded-2xl object-contain animate-float"
+              className="w-11/12 lg:w-5/6 max-w-xl h-auto rounded-2xl object-contain animate-float"
             />
           </div>
 
