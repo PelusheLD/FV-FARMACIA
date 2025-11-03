@@ -87,14 +87,14 @@ export default function Hero({ carouselData }: HeroProps) {
             </span>
             <h1 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl mt-4 text-gray-900 leading-tight">
               {slides[currentSlide].title}
-            </h1>
+        </h1>
             <p className="text-emerald-700/90 text-lg md:text-xl mt-3">
               {slides[currentSlide].subtitle}
             </p>
             <p className="text-gray-600 text-base md:text-lg mt-4 max-w-xl">
               {slides[currentSlide].description}
             </p>
-
+            
             {/* Badges de beneficios */}
             <div className="mt-6 flex flex-wrap gap-3">
               <div className="inline-flex items-center gap-2 rounded-md bg-white shadow-sm ring-1 ring-gray-200 px-3 py-2 text-sm text-gray-700">
@@ -110,33 +110,32 @@ export default function Hero({ carouselData }: HeroProps) {
 
             {/* CTAs */}
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
-              <Button
+          <Button 
                 id={`hero-primary-${currentSlide + 1}`}
-                onClick={() => handleButtonClick(currentSlide)}
-                size="lg"
+              onClick={() => handleButtonClick(currentSlide)}
+            size="lg"
                 className="bg-[#29a03b] hover:bg-[#238a33] text-white font-semibold px-6"
                 data-testid={`hero-primary-${currentSlide + 1}`}
-              >
+            >
                 <ExternalLink className="h-5 w-5 mr-2" /> {slides[currentSlide].buttonText}
-              </Button>
+          </Button>
               <a
                 href="#categories"
                 className="inline-flex items-center justify-center rounded-lg border border-emerald-300 bg-white px-6 py-3 text-emerald-800 font-semibold hover:bg-emerald-50 transition"
               >
                 Ver categorías <ArrowRight className="ml-2 h-4 w-4" />
               </a>
-            </div>
           </div>
-
+        </div>
+        
           {/* Columna derecha: composición con imagen */}
           <div className="relative hidden md:block">
             <div className="relative ml-auto w-[86%] max-w-md md:-mt-8 lg:-mt-12">
-              <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl ring-1 ring-emerald-400/20">
+              <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl ring-1 ring-emerald-400/20 bg-white">
                 <img
-                  src={slides[currentSlide].background || '/fondo.png'}
+                  src={'/fvfarmacia.svg'}
                   alt="FV Farmacia"
-                  className="h-full w-full object-cover"
-                  style={{ objectPosition: 'center 30%' }}
+                  className="h-full w-full object-contain"
                 />
               </div>
               {/* Tarjeta flotante */}
@@ -157,7 +156,7 @@ export default function Hero({ carouselData }: HeroProps) {
         <svg className="w-full h-10 text-emerald-600/20" viewBox="0 0 1440 80" preserveAspectRatio="none" fill="currentColor">
           <path d="M0,64L48,64C96,64,192,64,288,64C384,64,480,64,576,53.3C672,43,768,21,864,16C960,11,1056,21,1152,26.7C1248,32,1344,32,1392,32L1440,32L1440,80L1392,80C1344,80,1248,80,1152,80C1056,80,960,80,864,80C768,80,672,80,576,80C480,80,384,80,288,80C192,80,96,80,48,80L0,80Z" />
         </svg>
-      </div>
+    </div>
     </section>
   );
 }
