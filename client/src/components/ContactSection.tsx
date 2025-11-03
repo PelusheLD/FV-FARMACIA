@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { MapPin } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import type { SiteSettings } from '@shared/schema';
 
 // Componente de mapa usando iframe de Google Maps (más simple y confiable)
@@ -7,7 +7,7 @@ const ContactMap = ({ latitude, longitude }: { latitude: number; longitude: numb
   const mapCoordinates = `${latitude},${longitude}`;
   
   return (
-    <div className="map-container w-full h-full rounded-xl overflow-hidden relative">
+    <div className="map-container w-full h-full rounded-lg overflow-hidden border">
       <iframe
         src={`https://maps.google.com/maps?q=${mapCoordinates}&z=18&output=embed&hl=es&t=m`}
         width="100%"
@@ -15,8 +15,7 @@ const ContactMap = ({ latitude, longitude }: { latitude: number; longitude: numb
         allowFullScreen
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
-        title="Ubicación de FV FARMACIA"
-        className="rounded-xl"
+        title="Ubicación de FV GRUPO EMPRESARIAL"
         onLoad={() => {
           // Ocultar el fallback cuando el iframe carga
           const fallback = document.querySelector('.map-fallback');
@@ -26,11 +25,12 @@ const ContactMap = ({ latitude, longitude }: { latitude: number; longitude: numb
         }}
       />
       {/* Fallback si el iframe no carga */}
-      <div className="map-fallback absolute inset-0 bg-gray-100 flex items-center justify-center text-gray-600 text-center p-4 rounded-xl">
+      <div className="map-fallback absolute inset-0 bg-gray-200 flex items-center justify-center text-gray-600 text-center p-4">
         <div>
-          <MapPin className="h-12 w-12 mx-auto mb-3 text-[#29a03b]" />
+          <MapPin className="h-8 w-8 mx-auto mb-2 text-blue-600" />
           <p className="font-semibold">Mapa interactivo</p>
-          <p className="text-sm mt-2">Ubicación: {latitude.toFixed(6)}, {longitude.toFixed(6)}</p>
+          <p className="text-sm">Ubicación: {latitude.toFixed(6)}, {longitude.toFixed(6)}</p>
+          <p className="text-xs mt-2 text-gray-500">Cargando mapa de Google...</p>
         </div>
       </div>
     </div>
@@ -50,56 +50,30 @@ export default function ContactSection() {
   const longitude = parseFloat(settings.longitude || '-69.20519760343741');
 
   return (
-    <section id="contacto" className="py-16 bg-white relative overflow-hidden">
-      <div className="container mx-auto px-4 relative z-10 max-w-7xl">
-        {/* Encabezado de la sección */}
+    <section id="contacto" className="py-16 bg-white">
+      <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center gap-3 mb-4">
-            <div className="bg-gradient-to-br from-[#29a03b] to-green-600 p-3 rounded-2xl shadow-lg">
-              <MapPin className="h-8 w-8 text-white" />
-            </div>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900">
-              Nuestra Ubicación
-            </h2>
-          </div>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Encuéntranos fácilmente y visítanos cuando necesites atención farmacéutica
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Nuestra Ubicación</h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Estamos aquí para atenderte. Visítanos o contáctanos para más información.
           </p>
         </div>
 
-        {/* Layout: Imagen izquierda, Mapa derecha */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-          {/* Columna Izquierda - Imagen */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          {/* Imagen flotante */}
           <div className="relative">
-            <img 
-              src="/ubicacion.png" 
-              alt="Nuestra Ubicación" 
+            <img
+              src="/ubicacion.png"
+              alt="Nuestra Ubicación"
               className="w-full h-auto rounded-2xl object-contain animate-float"
             />
           </div>
 
-          {/* Columna Derecha - Mapa elegante */}
-          <div className="relative">
-            {/* Mapa limpio y elegante */}
-            <div className="relative bg-white p-6 rounded-2xl shadow-xl border border-green-200">
-              <div className="h-[400px]">
-                <ContactMap latitude={latitude} longitude={longitude} />
-              </div>
-              
-              {/* Botón de Google Maps integrado */}
-              <div className="absolute bottom-4 right-4 z-30">
-                <a
-                  href={`https://www.google.com/maps?q=${latitude},${longitude}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-gradient-to-r from-[#29a03b] to-green-600 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all cursor-pointer inline-flex items-center gap-2"
-                >
-                  <span className="text-white font-bold text-xs">Ver en Google Maps</span>
-                  <svg className="h-3 w-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
-                </a>
-              </div>
+          {/* Mapa */}
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Ubicación en el Mapa</h3>
+            <div className="h-96 rounded-lg overflow-hidden">
+              <ContactMap latitude={latitude} longitude={longitude} />
             </div>
           </div>
         </div>
