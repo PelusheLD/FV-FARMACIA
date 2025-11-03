@@ -135,7 +135,7 @@ export default function Hero({ carouselData }: HeroProps) {
                 <img
                   src={slides[currentSlide].background && slides[currentSlide].background.trim() !== '' ? slides[currentSlide].background : '/fvfarmacia.svg'}
                   alt="FV Farmacia"
-                  className="h-full w-full object-contain"
+                  className="h-full w-full object-cover object-center"
                 />
               </div>
               {/* Tarjeta flotante */}
