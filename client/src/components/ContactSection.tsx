@@ -53,7 +53,12 @@ export default function ContactSection() {
     <section id="contacto" className="py-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Nuestra Ubicación</h2>
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <MapPin className="h-8 w-8 text-emerald-600" />
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
+              Nuestra ubicación
+            </h2>
+          </div>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Estamos aquí para atenderte. Visítanos o contáctanos para más información.
           </p>
