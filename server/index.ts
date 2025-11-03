@@ -20,6 +20,13 @@ const configuredOrigins = corsOriginsEnv
   .map(o => o.trim())
   .filter(Boolean);
 
+// Detectar el propio dominio en Render (ej. https://fv-farmacia.onrender.com)
+const selfOrigin = (process.env.RENDER_EXTERNAL_URL || '')
+  .replace(/\/$/, '');
+if (selfOrigin && !configuredOrigins.includes(selfOrigin)) {
+  configuredOrigins.push(selfOrigin);
+}
+
 app.use(cors({
   origin: (origin, callback) => {
     // Permitir requests sin origin (por ejemplo, herramientas o curl)
