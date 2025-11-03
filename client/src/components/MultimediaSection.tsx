@@ -111,10 +111,10 @@ function VideoPlayer({ post }: { post: InstagramPost }) {
 export default function MultimediaSection({ instagramUrl }: MultimediaSectionProps) {
   const { data: posts = [], isLoading, error } = useQuery<InstagramPost[]>({
     queryKey: ["/api/instagram/posts"],
-    enabled: true, // Always enabled - let the server handle token validation
+    // Siempre intentamos cargar; el backend valida si hay token
+    enabled: true,
     refetchInterval: 300000, // Refetch every 5 minutes
     staleTime: 300000, // Data is considered fresh for 5 minutes
-    retry: 2, // Retry 2 times on error
   });
 
   const formatDate = (timestamp: string) => {
@@ -200,14 +200,9 @@ export default function MultimediaSection({ instagramUrl }: MultimediaSectionPro
           <div className="text-center py-12">
             <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
               <p className="text-red-800 font-medium mb-2">Error al cargar Instagram</p>
-              <p className="text-red-600 text-sm mb-2">
+              <p className="text-red-600 text-sm">
                 No se pudieron cargar las publicaciones. Verifica la configuración de Instagram en el panel de administración.
               </p>
-              {import.meta.env.DEV && (
-                <p className="text-red-500 text-xs mt-2 font-mono">
-                  {(error as any)?.message || 'Error desconocido'}
-                </p>
-              )}
             </div>
           </div>
         ) : posts.length === 0 ? (
