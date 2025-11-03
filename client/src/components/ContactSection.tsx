@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 import type { SiteSettings } from '@shared/schema';
 
 // Componente de mapa usando iframe de Google Maps (más simple y confiable)
@@ -60,12 +60,12 @@ export default function ContactSection() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-          {/* Imagen flotante */}
-          <div className="relative">
+          {/* Imagen flotante (más pequeña) */}
+          <div className="relative flex justify-center lg:justify-start">
             <img
               src="/ubicacion.png"
               alt="Nuestra Ubicación"
-              className="w-full h-auto rounded-2xl object-contain animate-float"
+              className="w-3/4 max-w-md h-auto rounded-2xl object-contain animate-float"
             />
           </div>
 
