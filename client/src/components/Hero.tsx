@@ -130,8 +130,8 @@ export default function Hero({ carouselData }: HeroProps) {
         
           {/* Columna derecha: composición con imagen */}
           <div className="relative hidden md:block">
-            <div className="relative ml-auto w-[86%] max-w-md md:-mt-8 lg:-mt-12">
-              <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl ring-1 ring-emerald-400/20 bg-white">
+            <div className="relative ml-auto w-full max-w-none md:-mt-8 lg:-mt-12">
+              <div className="aspect-square rounded-3xl overflow-hidden shadow-2xl ring-1 ring-emerald-400/20">
                 <img
                   src={'/fvfarmacia.svg'}
                   alt="FV Farmacia"
