@@ -130,8 +130,8 @@ export default function Hero({ carouselData }: HeroProps) {
         
           {/* Columna derecha: composición con imagen */}
           <div className="relative hidden md:block">
-            <div className="relative ml-auto w-[92%] max-w-lg md:-mt-8 lg:-mt-12">
-              <div className="aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl ring-1 ring-emerald-400/20">
+            <div className="relative ml-auto w-[86%] max-w-md md:-mt-8 lg:-mt-12">
+              <div className="aspect-square rounded-3xl overflow-hidden shadow-2xl ring-1 ring-emerald-400/20">
                 <img
                   src={slides[currentSlide].background && slides[currentSlide].background.trim() !== '' ? slides[currentSlide].background : '/fvfarmacia.svg'}
                   alt="FV Farmacia"
