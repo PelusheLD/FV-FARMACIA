@@ -51,7 +51,10 @@ export default function AdminSettings() {
       carouselTitle3: (formData.get('carouselTitle3') as string) || undefined,
       carouselSubtitle3: (formData.get('carouselSubtitle3') as string) || undefined,
       carouselDescription3: (formData.get('carouselDescription3') as string) || undefined,
-      carouselBackground3: (formData.get('carouselBackground3') as string) || undefined,
+      carouselBackground3: (() => {
+        const val = (formData.get('carouselBackground3') as string) || '';
+        return val.trim() === '' ? null : val.trim();
+      })(),
       carouselButton3: (formData.get('carouselButton3') as string) || undefined,
       carouselUrl3: (formData.get('carouselUrl3') as string) || undefined,
     };
