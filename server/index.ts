@@ -13,13 +13,28 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Configurar CORS
+// Configurar CORS con orígenes dinámicos
+const corsOriginsEnv = process.env.CORS_ORIGINS || '';
+const configuredOrigins = corsOriginsEnv
+  .split(',')
+  .map(o => o.trim())
+  .filter(Boolean);
+
 app.use(cors({
-  origin: [
-    'http://localhost:5173', // Vite dev server
-    'https://fv-bodegon-frontend.onrender.com', // Frontend en Render
-    'https://fv-bodegon.onrender.com' // Backend en Render (por si acaso)
-  ],
+  origin: (origin, callback) => {
+    // Permitir requests sin origin (por ejemplo, herramientas o curl)
+    if (!origin) return callback(null, true);
+
+    // En desarrollo, permitir cualquier origen
+    if (app.get('env') === 'development') return callback(null, true);
+
+    // En producción, permitir únicamente los orígenes configurados
+    if (configuredOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error(`Not allowed by CORS: ${origin}`));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Session-ID']
