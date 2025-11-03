@@ -150,10 +150,10 @@ export class PostgresStorage implements IStorage {
     
     try {
       console.log('PostgresStorage: Starting search with words:', searchWords);
-      
+    
       // Obtener todos los productos de la categoría primero
       const allProducts = await db.select()
-        .from(products)
+      .from(products)
         .where(eq(products.categoryId, categoryId));
       
       console.log('PostgresStorage: Total products in category:', allProducts.length);
@@ -180,7 +180,7 @@ export class PostgresStorage implements IStorage {
       
       console.log('PostgresStorage: Paginated products:', paginatedProducts.length);
       console.log('PostgresStorage: Total matches:', total);
-      
+    
       return { products: paginatedProducts, total, hasMore };
     } catch (error) {
       console.error('PostgresStorage: Error in searchProductsByCategory:', error);

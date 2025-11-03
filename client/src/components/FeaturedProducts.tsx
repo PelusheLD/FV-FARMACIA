@@ -56,20 +56,20 @@ export default function FeaturedProducts({ onAddToCart }: FeaturedProductsProps)
           <div className="relative">
             <Carousel className="relative" opts={{ align: "start", loop: true }} setApi={setApi}>
               <CarouselContent>
-                {products.map((product) => (
+            {products.map((product) => (
                   <CarouselItem key={product.id} className="basis-[85%] sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/4">
-                    <ProductCard
-                      id={product.id}
-                      name={product.name}
-                      price={product.price}
-                      imageUrl={product.imageUrl}
-                      measurementType={product.measurementType}
-                      stock={product.stock}
-                      taxPercentage={settings?.taxPercentage ? parseFloat(settings.taxPercentage) : 16}
-                      onAddToCart={(quantity) => onAddToCart(product, quantity)}
-                    />
+              <ProductCard
+                id={product.id}
+                name={product.name}
+                price={product.price}
+                imageUrl={product.imageUrl}
+                measurementType={product.measurementType}
+                stock={product.stock}
+                taxPercentage={settings?.taxPercentage ? parseFloat(settings.taxPercentage) : 16}
+                onAddToCart={(quantity) => onAddToCart(product, quantity)}
+              />
                   </CarouselItem>
-                ))}
+            ))}
               </CarouselContent>
               <div className="mt-4 flex justify-center gap-3">
                 <Button variant="outline" size="icon" onClick={() => api?.scrollPrev()} aria-label="Anterior">

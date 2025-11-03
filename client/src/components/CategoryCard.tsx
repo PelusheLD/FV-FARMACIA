@@ -13,7 +13,7 @@ export default function CategoryCard({ name, imageUrl, icon: Icon, leySeca = fal
   return (
     <Card
       onClick={onClick}
-      className="group h-48 md:h-52 flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-2 bg-gradient-to-br from-white via-green-50/30 to-white hover:shadow-[#29a03b]/10 p-6 relative overflow-hidden"
+      className="group h-48 md:h-52 flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-2 bg-gradient-to-br from-white via-green-50/30 to-white border border-green-200/50 hover:border-[#29a03b] hover:shadow-[#29a03b]/10 p-6 relative overflow-hidden"
       data-testid={`card-category-${name.toLowerCase().replace(/\s+/g, '-')}`}
     >
       {/* Patrón de fondo decorativo */}
@@ -24,7 +24,8 @@ export default function CategoryCard({ name, imageUrl, icon: Icon, leySeca = fal
         }} />
       </div>
 
-      
+      {/* Borde brillante al hacer hover */}
+      <div className="absolute inset-0 rounded-lg border-2 border-transparent group-hover:border-[#29a03b]/30 transition-all duration-300" />
       
       {/* Banner de Ley Seca */}
       {leySeca && (
@@ -71,7 +72,8 @@ export default function CategoryCard({ name, imageUrl, icon: Icon, leySeca = fal
         </div>
       </div>
       
-      
+      {/* Línea decorativa inferior */}
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#29a03b]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       
       {/* Indicador de hover izquierdo */}
       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-[#29a03b] group-hover:h-12 transition-all duration-300 rounded-full opacity-0 group-hover:opacity-100" />

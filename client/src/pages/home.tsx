@@ -167,10 +167,10 @@ export default function HomePage() {
               onCategorySelect={handleCategorySelect}
               onSearch={handleSearch}
             />
-            {/* Sección de Multimedia */}
-            <MultimediaSection instagramUrl={settings?.instagramUrl} />
             {/* Sección de Contacto */}
             <ContactSection />
+            {/* Sección de Multimedia */}
+            <MultimediaSection instagramUrl={settings?.instagramUrl} />
           </>
         ) : isSearchMode ? (
           <ProductGrid
