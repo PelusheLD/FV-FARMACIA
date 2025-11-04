@@ -22,7 +22,8 @@ export default function AdminImport() {
       setSessionId(newSessionId);
       setIsImporting(true);
 
-      const response = await fetch('/api/products/import-excel', {
+      const baseUrl = import.meta.env.VITE_API_URL || '';
+      const response = await fetch(`${baseUrl}/api/products/import-excel`, {
         method: 'POST',
         headers: {
           'X-Session-ID': newSessionId,
@@ -147,7 +148,7 @@ export default function AdminImport() {
         <CardHeader>
           <CardTitle>Archivo Excel</CardTitle>
           <CardDescription>
-            El archivo debe contener las columnas: Código, Nombre, Existencia Actual, Precio Máximo
+            El archivo debe contener las columnas: <strong>Código</strong>, <strong>Nombre</strong> y <strong>Precio Máximo</strong>. El <em>stock</em> será ignorado.
           </CardDescription>
         </CardHeader>
         <CardContent>

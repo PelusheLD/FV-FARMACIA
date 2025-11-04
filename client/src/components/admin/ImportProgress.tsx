@@ -26,8 +26,9 @@ export default function ImportProgress({ sessionId, onComplete, onError }: Impor
   useEffect(() => {
     if (!sessionId) return;
 
-    // Crear conexión Server-Sent Events
-    const eventSource = new EventSource(`/api/products/import-progress/${sessionId}`);
+    // Crear conexión Server-Sent Events hacia el backend (usar VITE_API_URL)
+    const baseUrl = (import.meta as any).env?.VITE_API_URL || '';
+    const eventSource = new EventSource(`${baseUrl}/api/products/import-progress/${sessionId}`);
     eventSourceRef.current = eventSource;
 
     eventSource.onopen = () => {

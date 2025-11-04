@@ -363,10 +363,8 @@ export class PostgresStorage implements IStorage {
 
           const codigo = kv['codigo'] ?? kv['código'] ?? kv['cod'] ?? '';
           const nombre = kv['nombre'] ?? kv['producto'] ?? '';
-          const existenciaRaw = kv['existencia actual'] ?? kv['existencia'] ?? kv['stock'] ?? '0';
+          // Solo tomaremos Código, Nombre y Precio Máximo. El stock no se utilizará.
           const precioRaw = kv['precio maximo'] ?? kv['precio máximo'] ?? kv['precio maximoo'] ?? kv['precio'] ?? '0';
-
-          const stock = parseFloat(String(existenciaRaw).replace(/,/g, '.')) || 0;
           const price = parseFloat(String(precioRaw).replace(/,/g, '.')) || 0;
           const isWeight = typeof nombre === 'string' && nombre.toLowerCase().includes('por peso');
 
@@ -377,7 +375,8 @@ export class PostgresStorage implements IStorage {
 
           const existing = await this.getProductByExternalCode(codigo);
           if (existing) {
-            const update: any = { price, stock };
+            // Mantener la categoría actual; actualizar solo el precio (y opcionalmente el tipo de medida si se detecta)
+            const update: any = { price };
             if (isWeight && existing.measurementType !== 'weight') update.measurementType = 'weight';
             await this.updateProduct(existing.id, update);
           } else {
@@ -386,7 +385,6 @@ export class PostgresStorage implements IStorage {
               price,
               categoryId: otros.id,
               externalCode: codigo,
-              stock,
               measurementType: isWeight ? 'weight' : 'unit',
             } as any);
           }
