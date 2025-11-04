@@ -26,7 +26,10 @@ export async function apiRequest(
 ): Promise<any> {
   const { method = 'GET', body, headers = {} } = options;
   
-  const res = await fetch(url, {
+  // Usar buildApiUrl para construir la URL completa con VITE_API_URL
+  const fullUrl = buildApiUrl(url);
+  
+  const res = await fetch(fullUrl, {
     method,
     headers: body ? { "Content-Type": "application/json", ...headers } : headers,
     body: body ? JSON.stringify(body) : undefined,
