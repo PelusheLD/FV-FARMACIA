@@ -17,7 +17,7 @@ const app = express();
 const corsOriginsEnv = process.env.CORS_ORIGINS || '';
 const configuredOrigins = corsOriginsEnv
   .split(',')
-  .map(o => o.trim())
+  .map(o => o.trim().replace(/\/$/, '')) // Eliminar barras finales
   .filter(Boolean);
 
 // Detectar el propio dominio en Render (ej. https://fv-farmacia.onrender.com)
@@ -35,8 +35,11 @@ app.use(cors({
     // En desarrollo, permitir cualquier origen
     if (app.get('env') === 'development') return callback(null, true);
 
+    // Normalizar el origin (eliminar barra final si existe)
+    const normalizedOrigin = origin.replace(/\/$/, '');
+
     // En producción, permitir únicamente los orígenes configurados
-    if (configuredOrigins.includes(origin)) {
+    if (configuredOrigins.includes(normalizedOrigin)) {
       return callback(null, true);
     }
 
