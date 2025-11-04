@@ -385,6 +385,7 @@ export class PostgresStorage implements IStorage {
               price,
               categoryId: otros.id,
               externalCode: codigo,
+              stock: 1,
               measurementType: isWeight ? 'weight' : 'unit',
             } as any);
           }
