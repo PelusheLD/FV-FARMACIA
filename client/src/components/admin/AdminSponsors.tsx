@@ -33,7 +33,13 @@ export default function AdminSponsors() {
   const createSponsorMutation = useMutation({
     mutationFn: async (data: any) => apiRequest('/api/sponsors', { method: 'POST', body: data }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/sponsors'] });
+      // Invalidar todas las queries relacionadas con sponsors (incluyendo variantes con parámetros)
+      queryClient.invalidateQueries({ 
+        predicate: (query) => {
+          const key = query.queryKey[0] as string;
+          return typeof key === 'string' && key.startsWith('/api/sponsors');
+        }
+      });
       toast({ title: "Patrocinador creado" });
       setIsDialogOpen(false);
       setEditingSponsor(null);
@@ -45,7 +51,13 @@ export default function AdminSponsors() {
     mutationFn: async ({ id, data }: { id: string; data: any }) =>
       apiRequest(`/api/sponsors/${id}`, { method: 'PUT', body: data }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/sponsors'] });
+      // Invalidar todas las queries relacionadas con sponsors (incluyendo variantes con parámetros)
+      queryClient.invalidateQueries({ 
+        predicate: (query) => {
+          const key = query.queryKey[0] as string;
+          return typeof key === 'string' && key.startsWith('/api/sponsors');
+        }
+      });
       toast({ title: "Patrocinador actualizado" });
       setIsDialogOpen(false);
       setEditingSponsor(null);
@@ -56,7 +68,13 @@ export default function AdminSponsors() {
   const deleteSponsorMutation = useMutation({
     mutationFn: async (id: string) => apiRequest(`/api/sponsors/${id}`, { method: 'DELETE' }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/sponsors'] });
+      // Invalidar todas las queries relacionadas con sponsors (incluyendo variantes con parámetros)
+      queryClient.invalidateQueries({ 
+        predicate: (query) => {
+          const key = query.queryKey[0] as string;
+          return typeof key === 'string' && key.startsWith('/api/sponsors');
+        }
+      });
       toast({ title: "Patrocinador eliminado" });
     },
   });
