@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LogOut, Users, FolderOpen, Settings, ShoppingBag, Upload } from "lucide-react";
+import { LogOut, Users, FolderOpen, Settings, ShoppingBag, Upload, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   SidebarProvider,
@@ -18,8 +18,9 @@ import AdminUsers from "@/components/admin/AdminUsers";
 import AdminSettings from "@/components/admin/AdminSettings";
 import AdminOrders from "@/components/admin/AdminOrders";
 import AdminImport from "@/components/admin/AdminImport";
+import AdminSponsors from "@/components/admin/AdminSponsors";
 
-type AdminSection = 'categories' | 'orders' | 'users' | 'settings' | 'import';
+type AdminSection = 'categories' | 'orders' | 'users' | 'settings' | 'import' | 'sponsors';
 
 export default function AdminPage({ onLogout }: { onLogout: () => void }) {
   const [activeSection, setActiveSection] = useState<AdminSection>('categories');
@@ -39,6 +40,11 @@ export default function AdminPage({ onLogout }: { onLogout: () => void }) {
       id: 'orders' as AdminSection,
       title: 'Pedidos',
       icon: ShoppingBag,
+    },
+    {
+      id: 'sponsors' as AdminSection,
+      title: 'Patrocinadores',
+      icon: Heart,
     },
     {
       id: 'users' as AdminSection,
@@ -111,6 +117,7 @@ export default function AdminPage({ onLogout }: { onLogout: () => void }) {
             {activeSection === 'categories' && <AdminCategories />}
             {activeSection === 'import' && <AdminImport />}
             {activeSection === 'orders' && <AdminOrders />}
+            {activeSection === 'sponsors' && <AdminSponsors />}
             {activeSection === 'users' && <AdminUsers />}
             {activeSection === 'settings' && <AdminSettings />}
           </main>

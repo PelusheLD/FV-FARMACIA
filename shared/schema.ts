@@ -147,3 +147,21 @@ export const insertOrderItemSchema = createInsertSchema(orderItems).omit({
 
 export type InsertOrderItem = z.infer<typeof insertOrderItemSchema>;
 export type OrderItem = typeof orderItems.$inferSelect;
+
+export const sponsors = pgTable("sponsors", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  logoUrl: text("logo_url"),
+  websiteUrl: text("website_url"),
+  enabled: boolean("enabled").notNull().default(true),
+  order: integer("order").notNull().default(0),
+  createdAt: timestamp("created_at").notNull().default(sql`now()`),
+});
+
+export const insertSponsorSchema = createInsertSchema(sponsors).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertSponsor = z.infer<typeof insertSponsorSchema>;
+export type Sponsor = typeof sponsors.$inferSelect;

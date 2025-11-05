@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import ContactSection from "@/components/ContactSection";
 import MultimediaSection from "@/components/MultimediaSection";
+import SponsorsSection from "@/components/SponsorsSection";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import { useToast } from "@/hooks/use-toast";
@@ -169,6 +170,8 @@ export default function HomePage() {
             />
             {/* Sección de Contacto */}
             <ContactSection />
+            {/* Sección de Patrocinadores */}
+            <SponsorsSection />
             {/* Sección de Multimedia */}
             <MultimediaSection instagramUrl={settings?.instagramUrl} />
           </>

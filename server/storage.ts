@@ -11,6 +11,8 @@ import {
   type InsertOrder,
   type OrderItem,
   type InsertOrderItem,
+  type Sponsor,
+  type InsertSponsor,
 } from "@shared/schema";
 
 export interface IStorage {
@@ -58,6 +60,13 @@ export interface IStorage {
   // Order Items
   getOrderItems(orderId: string): Promise<OrderItem[]>;
   createOrderItem(item: InsertOrderItem): Promise<OrderItem>;
+
+  // Sponsors
+  getSponsors(): Promise<Sponsor[]>;
+  getSponsorById(id: string): Promise<Sponsor | undefined>;
+  createSponsor(sponsor: InsertSponsor): Promise<Sponsor>;
+  updateSponsor(id: string, sponsor: Partial<InsertSponsor>): Promise<Sponsor | undefined>;
+  deleteSponsor(id: string): Promise<void>;
 }
 
 export class MemStorage implements IStorage {
@@ -325,6 +334,48 @@ export class MemStorage implements IStorage {
   async importProductsFromExcel(filePath: string, sessionId?: string): Promise<{ imported: number; errors: string[] }> {
     // Implementación básica para desarrollo sin DB
     return { imported: 0, errors: ['Excel import not available in memory storage'] };
+  }
+
+  // Sponsors
+  private sponsors: Map<string, Sponsor> = new Map();
+
+  async getSponsors(includeDisabled: boolean = false): Promise<Sponsor[]> {
+    const allSponsors = Array.from(this.sponsors.values());
+    const filtered = includeDisabled 
+      ? allSponsors 
+      : allSponsors.filter(s => s.enabled);
+    return filtered.sort((a, b) => a.order - b.order);
+  }
+
+  async getSponsorById(id: string): Promise<Sponsor | undefined> {
+    return this.sponsors.get(id);
+  }
+
+  async createSponsor(sponsor: InsertSponsor): Promise<Sponsor> {
+    const newSponsor: Sponsor = {
+      id: crypto.randomUUID(),
+      ...sponsor,
+      logoUrl: sponsor.logoUrl ?? null,
+      websiteUrl: sponsor.websiteUrl ?? null,
+      enabled: sponsor.enabled ?? true,
+      order: sponsor.order ?? 0,
+      createdAt: new Date(),
+    };
+    this.sponsors.set(newSponsor.id, newSponsor);
+    return newSponsor;
+  }
+
+  async updateSponsor(id: string, sponsor: Partial<InsertSponsor>): Promise<Sponsor | undefined> {
+    const existing = this.sponsors.get(id);
+    if (!existing) return undefined;
+    
+    const updated = { ...existing, ...sponsor };
+    this.sponsors.set(id, updated);
+    return updated;
+  }
+
+  async deleteSponsor(id: string): Promise<void> {
+    this.sponsors.delete(id);
   }
 }
 

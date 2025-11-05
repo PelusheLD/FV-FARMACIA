@@ -1,6 +1,6 @@
 import { db } from './db';
 import fs from 'fs';
-import { eq, desc, sql, and, like } from 'drizzle-orm';
+import { eq, desc, sql, and, like, asc } from 'drizzle-orm';
 import { 
   categories,
   products,
@@ -8,6 +8,7 @@ import {
   siteSettings,
   orders,
   orderItems,
+  sponsors,
   type Category, 
   type InsertCategory,
   type Product,
@@ -20,6 +21,8 @@ import {
   type InsertOrder,
   type OrderItem,
   type InsertOrderItem,
+  type Sponsor,
+  type InsertSponsor,
 } from "@shared/schema";
 import { IStorage } from './storage';
 
@@ -434,6 +437,41 @@ export class PostgresStorage implements IStorage {
   private async getProductByExternalCode(externalCode: string): Promise<Product | undefined> {
     const result = await db.select().from(products).where(eq(products.externalCode, externalCode));
     return result[0];
+  }
+
+  // Sponsors
+  async getSponsors(includeDisabled: boolean = false): Promise<Sponsor[]> {
+    if (includeDisabled) {
+      const result = await db.select().from(sponsors).orderBy(asc(sponsors.order));
+      return result;
+    } else {
+      const result = await db.select().from(sponsors)
+        .where(eq(sponsors.enabled, true))
+        .orderBy(asc(sponsors.order));
+      return result;
+    }
+  }
+
+  async getSponsorById(id: string): Promise<Sponsor | undefined> {
+    const result = await db.select().from(sponsors).where(eq(sponsors.id, id));
+    return result[0];
+  }
+
+  async createSponsor(sponsor: InsertSponsor): Promise<Sponsor> {
+    const result = await db.insert(sponsors).values(sponsor).returning();
+    return result[0];
+  }
+
+  async updateSponsor(id: string, sponsor: Partial<InsertSponsor>): Promise<Sponsor | undefined> {
+    const result = await db.update(sponsors)
+      .set(sponsor)
+      .where(eq(sponsors.id, id))
+      .returning();
+    return result[0];
+  }
+
+  async deleteSponsor(id: string): Promise<void> {
+    await db.delete(sponsors).where(eq(sponsors.id, id));
   }
 }
 
