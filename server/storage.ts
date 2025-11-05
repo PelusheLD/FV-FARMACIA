@@ -62,7 +62,7 @@ export interface IStorage {
   createOrderItem(item: InsertOrderItem): Promise<OrderItem>;
 
   // Sponsors
-  getSponsors(): Promise<Sponsor[]>;
+  getSponsors(includeDisabled?: boolean): Promise<Sponsor[]>;
   getSponsorById(id: string): Promise<Sponsor | undefined>;
   createSponsor(sponsor: InsertSponsor): Promise<Sponsor>;
   updateSponsor(id: string, sponsor: Partial<InsertSponsor>): Promise<Sponsor | undefined>;
