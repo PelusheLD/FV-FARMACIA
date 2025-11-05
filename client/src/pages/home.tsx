@@ -170,10 +170,10 @@ export default function HomePage() {
             />
             {/* Sección de Contacto */}
             <ContactSection />
-            {/* Sección de Patrocinadores */}
-            <SponsorsSection />
             {/* Sección de Multimedia */}
             <MultimediaSection instagramUrl={settings?.instagramUrl} />
+            {/* Sección de Patrocinadores */}
+            <SponsorsSection />
           </>
         ) : isSearchMode ? (
           <ProductGrid
