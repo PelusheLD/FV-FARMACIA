@@ -2,6 +2,14 @@ import { QueryClient, QueryFunction } from "@tanstack/react-query";
 
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
+    // Si es un error 401 (no autorizado), eliminar el token
+    if (res.status === 401) {
+      localStorage.removeItem('admin_token');
+      // Redirigir al login si estamos en una ruta admin
+      if (window.location.pathname.startsWith('/admin')) {
+        window.location.href = '/admin/login';
+      }
+    }
     const text = (await res.text()) || res.statusText;
     throw new Error(`${res.status}: ${text}`);
   }
@@ -26,12 +34,28 @@ export async function apiRequest(
 ): Promise<any> {
   const { method = 'GET', body, headers = {} } = options;
   
+  // Obtener token del localStorage
+  const token = localStorage.getItem('admin_token');
+  
+  // Construir headers con el token si existe
+  const requestHeaders: Record<string, string> = {
+    ...headers,
+  };
+  
+  if (body) {
+    requestHeaders['Content-Type'] = 'application/json';
+  }
+  
+  if (token) {
+    requestHeaders['Authorization'] = `Bearer ${token}`;
+  }
+  
   // Usar buildApiUrl para construir la URL completa con VITE_API_URL
   const fullUrl = buildApiUrl(url);
   
   const res = await fetch(fullUrl, {
     method,
-    headers: body ? { "Content-Type": "application/json", ...headers } : headers,
+    headers: requestHeaders,
     body: body ? JSON.stringify(body) : undefined,
     credentials: "include",
   });
@@ -57,7 +81,17 @@ export const getQueryFn: <T>(options: {
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
     const url = buildApiUrl(queryKey.join("/") as string);
+    
+    // Obtener token del localStorage
+    const token = localStorage.getItem('admin_token');
+    
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    
     const res = await fetch(url, {
+      headers,
       credentials: "include",
     });
 

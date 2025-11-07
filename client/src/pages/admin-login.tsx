@@ -22,10 +22,15 @@ export default function AdminLoginPage({ onLogin }: AdminLoginProps) {
     setIsLoading(true);
 
     try {
-      await apiRequest('/api/auth/login', {
+      const response = await apiRequest('/api/auth/login', {
         method: 'POST',
         body: { username, password },
       });
+
+      // Guardar token en localStorage
+      if (response.token) {
+        localStorage.setItem('admin_token', response.token);
+      }
 
       toast({
         title: "Inicio de sesión exitoso",
