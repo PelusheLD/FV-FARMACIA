@@ -41,10 +41,21 @@ export default function ProductGrid({ categoryName, categoryId, onBack, onAddToC
       
       console.log('ProductGrid: Loading products from:', url);
       
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        credentials: 'include',
+      });
       
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error('ProductGrid: Error response:', errorText);
         throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        console.error('ProductGrid: Non-JSON response:', text.substring(0, 200));
+        throw new Error('La respuesta del servidor no es JSON válido');
       }
       
       const data = await response.json();
@@ -91,13 +102,23 @@ export default function ProductGrid({ categoryName, categoryId, onBack, onAddToC
         const baseUrl = import.meta.env.VITE_API_URL || '';
         
         // Cargar categorías
-        const categoriesResponse = await fetch(`${baseUrl}/api/categories`);
+        const categoriesResponse = await fetch(`${baseUrl}/api/categories`, {
+          credentials: 'include',
+        });
+        if (!categoriesResponse.ok) {
+          throw new Error(`Error loading categories: ${categoriesResponse.status}`);
+        }
         const categories = await categoriesResponse.json();
         const currentCategory = categories.find((c: Category) => c.id === categoryId);
         setCategory(currentCategory || null);
 
         // Cargar settings
-        const settingsResponse = await fetch(`${baseUrl}/api/settings`);
+        const settingsResponse = await fetch(`${baseUrl}/api/settings`, {
+          credentials: 'include',
+        });
+        if (!settingsResponse.ok) {
+          throw new Error(`Error loading settings: ${settingsResponse.status}`);
+        }
         const settingsData = await settingsResponse.json();
         setSettings(settingsData);
       } catch (error) {
@@ -131,9 +152,21 @@ export default function ProductGrid({ categoryName, categoryId, onBack, onAddToC
           const url = `${baseUrl}/api/products/category/${categoryId}?page=1&limit=100`;
           console.log('ProductGrid: Loading initial products from:', url);
           
-          const response = await fetch(url);
+          const response = await fetch(url, {
+            credentials: 'include',
+          });
+          
           if (!response.ok) {
+            const errorText = await response.text();
+            console.error('ProductGrid: Error response:', errorText);
             throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          
+          const contentType = response.headers.get('content-type');
+          if (!contentType || !contentType.includes('application/json')) {
+            const text = await response.text();
+            console.error('ProductGrid: Non-JSON response:', text.substring(0, 200));
+            throw new Error('La respuesta del servidor no es JSON válido');
           }
           
           const data = await response.json();

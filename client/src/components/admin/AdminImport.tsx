@@ -22,17 +22,35 @@ export default function AdminImport() {
       setSessionId(newSessionId);
       setIsImporting(true);
 
+      // Obtener token del localStorage
+      const token = localStorage.getItem('admin_token');
+      
       const baseUrl = import.meta.env.VITE_API_URL || '';
-      const response = await fetch(`${baseUrl}/api/products/import-excel`, {
+      const url = `${baseUrl}/api/products/import-excel`;
+      
+      const headers: Record<string, string> = {
+        'X-Session-ID': newSessionId,
+      };
+      
+      // Incluir token JWT si existe
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
+      const response = await fetch(url, {
         method: 'POST',
-        headers: {
-          'X-Session-ID': newSessionId,
-        },
+        headers,
         body: formData,
       });
       
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorText = await response.text();
+        let errorData;
+        try {
+          errorData = JSON.parse(errorText);
+        } catch {
+          errorData = { error: errorText || 'Error en la importación' };
+        }
         throw new Error(errorData.error || 'Error en la importación');
       }
       
