@@ -89,7 +89,7 @@ const DollarRate: React.FC = () => {
               <div className="pt-2 border-t">
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span>Tasa Oficial</span>
-                  <span>Actualizado: {formatTime(new Date())}</span>
+                  <span>{formatTime(new Date())}</span>
                 </div>
               </div>
             </div>
