@@ -9,6 +9,14 @@ interface DollarRateData {
   fechaActualizacion: string;
 }
 
+interface DolarVzlaResponse {
+  current: {
+    usd: number;
+    eur: number;
+    date: string;
+  };
+}
+
 export const useDollarRate = () => {
   const [dollarRate, setDollarRate] = useState<DollarRateData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -19,22 +27,26 @@ export const useDollarRate = () => {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('https://ve.dolarapi.com/v1/dolares');
+      const response = await fetch('https://api.dolarvzla.com/public/exchange-rate');
       
       if (!response.ok) {
         throw new Error('Error al obtener la tasa del dólar');
       }
       
-      const data: DollarRateData[] = await response.json();
+      const data: DolarVzlaResponse = await response.json();
       
-      // Buscar la tasa oficial (BCV o similar)
-      const officialRate = data.find(rate => 
-        rate.nombre.toLowerCase().includes('bcv') || 
-        rate.nombre.toLowerCase().includes('oficial') ||
-        rate.fuente.toLowerCase().includes('bcv')
-      ) || data[0]; // Si no encuentra oficial, usar la primera
+      // Convertir el formato de la nueva API al formato esperado por el componente
+      const usdRate = data.current.usd;
+      const rateData: DollarRateData = {
+        fuente: 'DolarVzla',
+        nombre: 'Tasa Oficial',
+        compra: usdRate,
+        venta: usdRate,
+        promedio: usdRate,
+        fechaActualizacion: data.current.date
+      };
       
-      setDollarRate(officialRate);
+      setDollarRate(rateData);
       
     } catch (err) {
       setError('No se pudo obtener la tasa del dólar');
