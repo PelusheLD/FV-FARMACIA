@@ -59,7 +59,36 @@ export default function AdminCategories() {
     try {
       setLoadingMore(prev => ({ ...prev, [categoryId]: true }));
       
-      const response = await fetch(`/api/admin/products/category/${categoryId}?page=${page}&limit=200`);
+      // Obtener token del localStorage
+      const token = localStorage.getItem('admin_token');
+      
+      // Construir URL con VITE_API_URL
+      const baseUrl = import.meta.env.VITE_API_URL || '';
+      const url = `${baseUrl}/api/admin/products/category/${categoryId}?page=${page}&limit=200`;
+      
+      const headers: Record<string, string> = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
+      const response = await fetch(url, {
+        headers,
+        credentials: 'include',
+      });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error loading products:', errorText);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        console.error('Non-JSON response:', text.substring(0, 200));
+        throw new Error('La respuesta del servidor no es JSON válido');
+      }
+      
       const data = await response.json();
       
       if (append) {
