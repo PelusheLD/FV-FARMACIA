@@ -165,7 +165,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Endpoint para conteos de productos por categoría
-  app.get("/api/admin/products/counts", async (req, res) => {
+  app.get("/api/admin/products/counts", authenticateJWT, async (req, res) => {
     try {
       const counts = await storage.getProductCountsByCategory();
       res.json(counts);
