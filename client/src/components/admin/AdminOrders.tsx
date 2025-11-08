@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Eye, Package, CheckCircle, XCircle, Clock, Truck } from "lucide-react";
+import { Eye, Package, CheckCircle, XCircle, Clock, Truck, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -31,8 +31,11 @@ const statusMap = {
 };
 
 export default function AdminOrders() {
-  const { data: orders = [], isLoading } = useQuery<Order[]>({
+  const { data: orders = [], isLoading, isRefetching } = useQuery<Order[]>({
     queryKey: ['/api/orders'],
+    refetchInterval: 10000, // Actualizar cada 10 segundos
+    refetchOnWindowFocus: true, // Actualizar cuando la ventana recupera el foco
+    refetchOnMount: true, // Actualizar al montar el componente
   });
 
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -43,7 +46,9 @@ export default function AdminOrders() {
     mutationFn: async ({ id, status }: { id: string; status: string }) =>
       apiRequest(`/api/orders/${id}/status`, { method: 'PATCH', body: { status } }),
     onSuccess: () => {
+      // Invalidar y refetch inmediatamente para ver los cambios
       queryClient.invalidateQueries({ queryKey: ['/api/orders'] });
+      queryClient.refetchQueries({ queryKey: ['/api/orders'] });
       toast({ title: "Estado actualizado" });
     },
   });
@@ -64,9 +69,17 @@ export default function AdminOrders() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-display font-semibold">Gestión de Pedidos</h2>
-        <p className="text-muted-foreground">Administra y actualiza el estado de los pedidos</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-display font-semibold">Gestión de Pedidos</h2>
+          <p className="text-muted-foreground">Administra y actualiza el estado de los pedidos</p>
+        </div>
+        {isRefetching && (
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <RefreshCw className="h-4 w-4 animate-spin" />
+            <span>Actualizando...</span>
+          </div>
+        )}
       </div>
 
       <div className="grid gap-4">
