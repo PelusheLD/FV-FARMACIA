@@ -151,7 +151,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Endpoint paginado para admin
-  app.get("/api/admin/products/category/:categoryId", async (req, res) => {
+  app.get("/api/admin/products/category/:categoryId", authenticateJWT, async (req, res) => {
     try {
       const { categoryId } = req.params;
       const page = parseInt(req.query.page as string) || 1;
