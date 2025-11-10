@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { RefreshCw, DollarSign, ArrowLeftRight } from 'lucide-react';
-import { useDollarRate } from '@/hooks/useDollarRate';
+import { useDollarRate } from '@/contexts/DollarRateContext';
 import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface DollarRateData {
@@ -88,8 +88,8 @@ const DollarRate: React.FC = () => {
               {/* Source and Update Time */}
               <div className="pt-2 border-t">
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>Tasa Oficial</span>
-                  <span>{formatTime(new Date())}</span>
+                  <span>{dollarRate.nombre}</span>
+                  <span>Actualizado: {formatTime(new Date())}</span>
                 </div>
               </div>
             </div>
