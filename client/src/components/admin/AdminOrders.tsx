@@ -119,10 +119,6 @@ export default function AdminOrders() {
   };
 
   const handlePrintTicket = (order: Order) => {
-    // Crear una ventana nueva para imprimir
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) return;
-
     const statusInfo = statusMap[order.status as keyof typeof statusMap] || statusMap.pending;
     const paymentStatusMap: Record<string, string> = {
       pending: 'No confirmado',
@@ -130,212 +126,242 @@ export default function AdminOrders() {
       rejected: 'Rechazado',
     };
 
-    const htmlContent = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Ticket de Pedido - ${order.customerName}</title>
-          <style>
-            @media print {
-              @page {
-                size: 80mm auto;
-                margin: 0;
-              }
-              body {
-                margin: 0;
-                padding: 10mm;
-              }
-            }
-            body {
-              font-family: 'Courier New', monospace;
-              font-size: 12px;
-              line-height: 1.4;
-              margin: 0;
-              padding: 10mm;
-              max-width: 80mm;
-            }
-            .header {
-              text-align: center;
-              border-bottom: 2px dashed #000;
-              padding-bottom: 10px;
-              margin-bottom: 10px;
-            }
-            .header h1 {
-              margin: 0;
-              font-size: 16px;
-              font-weight: bold;
-            }
-            .section {
-              margin: 10px 0;
-              padding: 5px 0;
-              border-bottom: 1px dashed #ccc;
-            }
-            .section:last-child {
-              border-bottom: none;
-            }
-            .section-title {
-              font-weight: bold;
-              font-size: 13px;
-              margin-bottom: 5px;
-              text-transform: uppercase;
-            }
-            .row {
-              display: flex;
-              justify-content: space-between;
-              margin: 3px 0;
-            }
-            .label {
-              font-weight: bold;
-            }
-            .value {
-              text-align: right;
-            }
-            .total {
-              font-size: 14px;
-              font-weight: bold;
-              margin-top: 10px;
-              padding-top: 10px;
-              border-top: 2px dashed #000;
-            }
-            .footer {
-              text-align: center;
-              margin-top: 15px;
-              padding-top: 10px;
-              border-top: 1px dashed #ccc;
-              font-size: 10px;
-            }
-            .status-badge {
-              display: inline-block;
-              padding: 2px 8px;
-              border-radius: 3px;
-              font-size: 11px;
-              font-weight: bold;
-            }
-            .status-pending { background: #fef3c7; }
-            .status-approved { background: #d1fae5; }
-            .status-rejected { background: #fee2e2; }
-          </style>
-        </head>
-        <body>
-          <div class="header">
-            <h1>FV FARMACIA</h1>
-            <p>Ticket de Pedido</p>
-          </div>
+    // Crear un elemento oculto para el ticket
+    const printContainer = document.createElement('div');
+    printContainer.id = 'print-ticket-container';
+    printContainer.innerHTML = `
+      <style>
+        @media print {
+          @page {
+            size: 58mm auto;
+            margin: 0;
+          }
+          * {
+            visibility: hidden;
+          }
+          #print-ticket-container,
+          #print-ticket-container * {
+            visibility: visible;
+          }
+          #print-ticket-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 58mm;
+          }
+          body {
+            margin: 0;
+            padding: 5mm;
+          }
+        }
+        @media screen {
+          #print-ticket-container {
+            position: fixed;
+            left: -9999px;
+            top: -9999px;
+            width: 58mm;
+            background: white;
+            padding: 5mm;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            line-height: 1.3;
+          }
+        }
+        .ticket-header {
+          text-align: center;
+          border-bottom: 1px dashed #000;
+          padding-bottom: 5px;
+          margin-bottom: 5px;
+        }
+        .ticket-header h1 {
+          margin: 0;
+          font-size: 14px;
+          font-weight: bold;
+        }
+        .ticket-header p {
+          margin: 2px 0;
+          font-size: 9px;
+        }
+        .ticket-section {
+          margin: 5px 0;
+          padding: 3px 0;
+          border-bottom: 1px dashed #ccc;
+        }
+        .ticket-section:last-child {
+          border-bottom: none;
+        }
+        .ticket-section-title {
+          font-weight: bold;
+          font-size: 10px;
+          margin-bottom: 3px;
+          text-transform: uppercase;
+        }
+        .ticket-row {
+          display: flex;
+          justify-content: space-between;
+          margin: 2px 0;
+          font-size: 9px;
+        }
+        .ticket-label {
+          font-weight: bold;
+        }
+        .ticket-value {
+          text-align: right;
+          word-break: break-word;
+        }
+        .ticket-total {
+          font-size: 11px;
+          font-weight: bold;
+          margin-top: 5px;
+          padding-top: 5px;
+          border-top: 1px dashed #000;
+        }
+        .ticket-footer {
+          text-align: center;
+          margin-top: 8px;
+          padding-top: 5px;
+          border-top: 1px dashed #ccc;
+          font-size: 8px;
+        }
+        .ticket-status {
+          display: inline-block;
+          padding: 1px 4px;
+          font-size: 8px;
+          font-weight: bold;
+        }
+        .ticket-notes {
+          font-size: 9px;
+          margin-top: 3px;
+          word-break: break-word;
+        }
+      </style>
+      <div class="ticket-header">
+        <h1>FV FARMACIA</h1>
+        <p>Ticket de Pedido</p>
+      </div>
 
-          <div class="section">
-            <div class="section-title">Datos del Cliente</div>
-            <div class="row">
-              <span class="label">Nombre:</span>
-              <span class="value">${order.customerName}</span>
-            </div>
-            <div class="row">
-              <span class="label">Teléfono:</span>
-              <span class="value">${order.customerPhone}</span>
-            </div>
-            ${order.customerEmail ? `
-            <div class="row">
-              <span class="label">Email:</span>
-              <span class="value">${order.customerEmail}</span>
-            </div>
-            ` : ''}
-            ${order.customerAddress ? `
-            <div class="row">
-              <span class="label">Dirección:</span>
-              <span class="value">${order.customerAddress}</span>
-            </div>
-            ` : ''}
-          </div>
+      <div class="ticket-section">
+        <div class="ticket-section-title">Datos del Cliente</div>
+        <div class="ticket-row">
+          <span class="ticket-label">Nombre:</span>
+          <span class="ticket-value">${order.customerName}</span>
+        </div>
+        <div class="ticket-row">
+          <span class="ticket-label">Teléfono:</span>
+          <span class="ticket-value">${order.customerPhone}</span>
+        </div>
+        ${order.customerEmail ? `
+        <div class="ticket-row">
+          <span class="ticket-label">Email:</span>
+          <span class="ticket-value">${order.customerEmail}</span>
+        </div>
+        ` : ''}
+        ${order.customerAddress ? `
+        <div class="ticket-row">
+          <span class="ticket-label">Dirección:</span>
+          <span class="ticket-value">${order.customerAddress}</span>
+        </div>
+        ` : ''}
+      </div>
 
-          <div class="section">
-            <div class="section-title">Información del Pedido</div>
-            <div class="row">
-              <span class="label">Fecha:</span>
-              <span class="value">${new Date(order.createdAt).toLocaleString('es-ES')}</span>
-            </div>
-            <div class="row">
-              <span class="label">Estado:</span>
-              <span class="value">${statusInfo.label}</span>
-            </div>
-            <div class="row">
-              <span class="label">ID Pedido:</span>
-              <span class="value">${order.id.substring(0, 8)}...</span>
-            </div>
-          </div>
+      <div class="ticket-section">
+        <div class="ticket-section-title">Información del Pedido</div>
+        <div class="ticket-row">
+          <span class="ticket-label">Fecha:</span>
+          <span class="ticket-value">${new Date(order.createdAt).toLocaleString('es-ES', { 
+            day: '2-digit', 
+            month: '2-digit', 
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          })}</span>
+        </div>
+        <div class="ticket-row">
+          <span class="ticket-label">Estado:</span>
+          <span class="ticket-value">${statusInfo.label}</span>
+        </div>
+        <div class="ticket-row">
+          <span class="ticket-label">ID:</span>
+          <span class="ticket-value">${order.id.substring(0, 8)}</span>
+        </div>
+      </div>
 
-          ${(order.paymentBank || order.paymentCI || order.paymentPhone) ? `
-          <div class="section">
-            <div class="section-title">Datos de Pago</div>
-            ${order.paymentBank ? `
-            <div class="row">
-              <span class="label">Banco:</span>
-              <span class="value">${getBankName(order.paymentBank)}</span>
-            </div>
-            ` : ''}
-            ${order.paymentCI ? `
-            <div class="row">
-              <span class="label">Documento:</span>
-              <span class="value">${order.paymentCI}</span>
-            </div>
-            ` : ''}
-            ${order.paymentPhone ? `
-            <div class="row">
-              <span class="label">Teléfono:</span>
-              <span class="value">${order.paymentPhone}</span>
-            </div>
-            ` : ''}
-            <div class="row">
-              <span class="label">Estado de Pago:</span>
-              <span class="value">
-                <span class="status-badge status-${order.paymentStatus || 'pending'}">
-                  ${paymentStatusMap[order.paymentStatus || 'pending']}
-                </span>
-              </span>
-            </div>
-          </div>
-          ` : ''}
+      ${(order.paymentBank || order.paymentCI || order.paymentPhone) ? `
+      <div class="ticket-section">
+        <div class="ticket-section-title">Datos de Pago</div>
+        ${order.paymentBank ? `
+        <div class="ticket-row">
+          <span class="ticket-label">Banco:</span>
+          <span class="ticket-value">${getBankName(order.paymentBank)}</span>
+        </div>
+        ` : ''}
+        ${order.paymentCI ? `
+        <div class="ticket-row">
+          <span class="ticket-label">Documento:</span>
+          <span class="ticket-value">${order.paymentCI}</span>
+        </div>
+        ` : ''}
+        ${order.paymentPhone ? `
+        <div class="ticket-row">
+          <span class="ticket-label">Teléfono:</span>
+          <span class="ticket-value">${order.paymentPhone}</span>
+        </div>
+        ` : ''}
+        <div class="ticket-row">
+          <span class="ticket-label">Estado:</span>
+          <span class="ticket-value">
+            <span class="ticket-status">${paymentStatusMap[order.paymentStatus || 'pending']}</span>
+          </span>
+        </div>
+      </div>
+      ` : ''}
 
-          ${order.notes ? `
-          <div class="section">
-            <div class="section-title">Notas</div>
-            <p>${order.notes}</p>
-          </div>
-          ` : ''}
+      ${order.notes ? `
+      <div class="ticket-section">
+        <div class="ticket-section-title">Notas</div>
+        <div class="ticket-notes">${order.notes}</div>
+      </div>
+      ` : ''}
 
-          <div class="section total">
-            <div class="row">
-              <span>Total en USD:</span>
-              <span>$${parseFloat(order.total).toFixed(2)}</span>
-            </div>
-            ${order.totalInBolivares ? `
-            <div class="row">
-              <span>Total en Bs.:</span>
-              <span>Bs. ${parseFloat(order.totalInBolivares).toLocaleString('es-VE', { 
-                minimumFractionDigits: 2, 
-                maximumFractionDigits: 2 
-              })}</span>
-            </div>
-            ` : ''}
-          </div>
+      <div class="ticket-section ticket-total">
+        <div class="ticket-row">
+          <span>Total USD:</span>
+          <span>$${parseFloat(order.total).toFixed(2)}</span>
+        </div>
+        ${order.totalInBolivares ? `
+        <div class="ticket-row">
+          <span>Total Bs.:</span>
+          <span>Bs. ${parseFloat(order.totalInBolivares).toLocaleString('es-VE', { 
+            minimumFractionDigits: 2, 
+            maximumFractionDigits: 2 
+          })}</span>
+        </div>
+        ` : ''}
+      </div>
 
-          <div class="footer">
-            <p>Gracias por su compra</p>
-            <p>${new Date().toLocaleString('es-ES')}</p>
-          </div>
-        </body>
-      </html>
+      <div class="ticket-footer">
+        <p>Gracias por su compra</p>
+        <p>${new Date().toLocaleString('es-ES', { 
+          day: '2-digit', 
+          month: '2-digit', 
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })}</p>
+      </div>
     `;
 
-    printWindow.document.write(htmlContent);
-    printWindow.document.close();
-    
-    // Esperar a que se cargue el contenido y luego imprimir
-    printWindow.onload = () => {
+    // Agregar al body temporalmente
+    document.body.appendChild(printContainer);
+
+    // Imprimir
+    setTimeout(() => {
+      window.print();
+      // Remover el elemento después de imprimir
       setTimeout(() => {
-        printWindow.print();
-        // Cerrar la ventana después de imprimir (opcional)
-        // printWindow.close();
-      }, 250);
-    };
+        document.body.removeChild(printContainer);
+      }, 100);
+    }, 100);
   };
 
   if (isLoading) {
