@@ -341,13 +341,6 @@ export default function AdminOrders() {
 
       <div class="ticket-footer">
         <p>Gracias por su compra</p>
-        <p>${new Date().toLocaleString('es-ES', { 
-          day: '2-digit', 
-          month: '2-digit', 
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        })}</p>
       </div>
     `;
 
