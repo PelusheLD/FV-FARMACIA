@@ -514,6 +514,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Endpoint para actualizar el estado de pago de una orden
+  app.patch("/api/orders/:id/payment", authenticateJWT, async (req, res) => {
+    try {
+      const { paymentStatus } = req.body;
+      if (!paymentStatus || !['pending', 'approved', 'rejected'].includes(paymentStatus)) {
+        return res.status(400).json({ error: "paymentStatus must be 'pending', 'approved', or 'rejected'" });
+      }
+      
+      const order = await storage.updateOrderPaymentStatus(req.params.id, paymentStatus);
+      if (!order) {
+        return res.status(404).json({ error: "Order not found" });
+      }
+      
+      res.json(order);
+    } catch (error: any) {
+      console.error("Error updating payment status:", error);
+      res.status(500).json({ error: error.message || "Failed to update payment status" });
+    }
+  });
+
   app.get("/api/orders/:id/items", async (req, res) => {
     try {
       const items = await storage.getOrderItems(req.params.id);

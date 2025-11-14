@@ -57,6 +57,11 @@ export default function AdminSettings() {
       })(),
       carouselButton3: (formData.get('carouselButton3') as string) || undefined,
       carouselUrl3: (formData.get('carouselUrl3') as string) || undefined,
+      // Datos bancarios para pagos
+      paymentBank: (formData.get('paymentBank') as string) || undefined,
+      paymentCI: (formData.get('paymentCI') as string) || undefined,
+      paymentPhone: (formData.get('paymentPhone') as string) || undefined,
+      paymentInstructions: (formData.get('paymentInstructions') as string) || undefined,
     };
 
     console.log("Frontend sending data:", data);
@@ -372,6 +377,59 @@ export default function AdminSettings() {
                   defaultValue={settings?.carouselUrl3 || ''}
                 />
               </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Datos Bancarios para Pagos</CardTitle>
+            <CardDescription>Información de cuenta para pagos móviles</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="paymentBank">Banco</Label>
+              <Input
+                id="paymentBank"
+                name="paymentBank"
+                placeholder="Banplus"
+                defaultValue={settings?.paymentBank || ''}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="paymentCI">Documento</Label>
+              <Input
+                id="paymentCI"
+                name="paymentCI"
+                placeholder="J-503280280"
+                defaultValue={settings?.paymentCI || ''}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="paymentPhone">Telefono</Label>
+              <Input
+                id="paymentPhone"
+                name="paymentPhone"
+                type="tel"
+                placeholder="04245775917"
+                defaultValue={settings?.paymentPhone || ''}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="paymentInstructions">Instrucciones de Pago</Label>
+              <Textarea
+                id="paymentInstructions"
+                name="paymentInstructions"
+                placeholder="IMPORTANTE: Indicar número de teléfono, banco, cédula titular del pago móvil para confirmar."
+                rows={3}
+                defaultValue={settings?.paymentInstructions || ''}
+              />
+              <p className="text-xs text-muted-foreground">
+                Instrucciones que se mostrarán a los clientes al realizar el pago
+              </p>
             </div>
           </CardContent>
         </Card>

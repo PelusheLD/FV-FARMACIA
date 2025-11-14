@@ -285,6 +285,7 @@ export class PostgresStorage implements IStorage {
     const orderData = {
       ...order,
       total: order.total.toString(),
+      totalInBolivares: order.totalInBolivares ? order.totalInBolivares.toString() : null,
     };
     const result = await db.insert(orders).values(orderData).returning();
     return result[0];
@@ -293,6 +294,14 @@ export class PostgresStorage implements IStorage {
   async updateOrderStatus(id: string, status: string): Promise<Order | undefined> {
     const result = await db.update(orders)
       .set({ status, updatedAt: new Date() })
+      .where(eq(orders.id, id))
+      .returning();
+    return result[0];
+  }
+
+  async updateOrderPaymentStatus(id: string, paymentStatus: string): Promise<Order | undefined> {
+    const result = await db.update(orders)
+      .set({ paymentStatus, updatedAt: new Date() })
       .where(eq(orders.id, id))
       .returning();
     return result[0];

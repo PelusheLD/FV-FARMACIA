@@ -56,6 +56,7 @@ export interface IStorage {
   getOrderById(id: string): Promise<Order | undefined>;
   createOrder(order: InsertOrder): Promise<Order>;
   updateOrderStatus(id: string, status: string): Promise<Order | undefined>;
+  updateOrderPaymentStatus(id: string, paymentStatus: string): Promise<Order | undefined>;
   
   // Order Items
   getOrderItems(orderId: string): Promise<OrderItem[]>;
@@ -295,6 +296,11 @@ export class MemStorage implements IStorage {
       customerAddress: order.customerAddress ?? null,
       notes: order.notes ?? null,
       total: order.total.toString(),
+      totalInBolivares: order.totalInBolivares ? order.totalInBolivares.toString() : null,
+      paymentBank: order.paymentBank ?? null,
+      paymentCI: order.paymentCI ?? null,
+      paymentPhone: order.paymentPhone ?? null,
+      paymentStatus: order.paymentStatus ?? 'pending',
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -309,6 +315,19 @@ export class MemStorage implements IStorage {
     const updated = { 
       ...existing, 
       status,
+      updatedAt: new Date(),
+    };
+    this.orders.set(id, updated);
+    return updated;
+  }
+
+  async updateOrderPaymentStatus(id: string, paymentStatus: string): Promise<Order | undefined> {
+    const existing = this.orders.get(id);
+    if (!existing) return undefined;
+    
+    const updated = { 
+      ...existing, 
+      paymentStatus,
       updatedAt: new Date(),
     };
     this.orders.set(id, updated);

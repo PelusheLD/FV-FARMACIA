@@ -21,6 +21,41 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { Order, OrderItem } from "@shared/schema";
 
+const BANKS = [
+  { code: '0102', name: 'BANCO DE VENEZUELA' },
+  { code: '0104', name: 'BANCO VENEZOLANO DE CREDITO' },
+  { code: '0105', name: 'BANCO MERCANTIL' },
+  { code: '0108', name: 'BBVA PROVINCIAL' },
+  { code: '0114', name: 'BANCARIBE' },
+  { code: '0115', name: 'BANCO EXTERIOR' },
+  { code: '0128', name: 'BANCO CARONI' },
+  { code: '0134', name: 'BANESCO' },
+  { code: '0137', name: 'BANCO SOFITASA' },
+  { code: '0138', name: 'BANCO PLAZA' },
+  { code: '0146', name: 'BANGENTE' },
+  { code: '0151', name: 'BANCO FONDO COMUN' },
+  { code: '0156', name: '100% BANCO' },
+  { code: '0157', name: 'DELSUR BANCO UNIVERSAL' },
+  { code: '0163', name: 'BANCO DEL TESORO' },
+  { code: '0168', name: 'BANCRECER' },
+  { code: '0169', name: 'R4 BANCO MICROFINANCIERO C.A.' },
+  { code: '0171', name: 'BANCO ACTIVO' },
+  { code: '0172', name: 'BANCAMIGA BANCO UNIVERSAL, C.A.' },
+  { code: '0173', name: 'BANCO INTERNACIONAL DE DESARROLLO' },
+  { code: '0174', name: 'BANPLUS' },
+  { code: '0175', name: 'BANCO DIGITAL DE LOS TRABAJADORES, BANCO UNIVERSAL' },
+  { code: '0177', name: 'BANFANB' },
+  { code: '0178', name: 'N58 BANCO DIGITAL BANCO MICROFINANCIERO S A' },
+  { code: '0191', name: 'BANCO NACIONAL DE CREDITO' },
+];
+
+// Función helper para obtener el nombre del banco desde el código
+const getBankName = (code: string | null | undefined): string => {
+  if (!code) return code || '';
+  const bank = BANKS.find(b => b.code === code);
+  return bank ? bank.name : code;
+};
+
 const statusMap = {
   pending: { label: "Pendiente", icon: Clock, color: "bg-yellow-500" },
   confirmed: { label: "Confirmado", icon: CheckCircle, color: "bg-blue-500" },
@@ -50,6 +85,26 @@ export default function AdminOrders() {
       queryClient.invalidateQueries({ queryKey: ['/api/orders'] });
       queryClient.refetchQueries({ queryKey: ['/api/orders'] });
       toast({ title: "Estado actualizado" });
+    },
+  });
+
+  const updatePaymentStatusMutation = useMutation({
+    mutationFn: async ({ id, paymentStatus }: { id: string; paymentStatus: string }) =>
+      apiRequest(`/api/orders/${id}/payment`, { method: 'PATCH', body: { paymentStatus } }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/orders'] });
+      queryClient.refetchQueries({ queryKey: ['/api/orders'] });
+      toast({
+        title: "Estado de pago actualizado",
+        description: "El estado de pago ha sido actualizado correctamente",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo actualizar el estado de pago",
+        variant: "destructive",
+      });
     },
   });
 
@@ -119,6 +174,14 @@ export default function AdminOrders() {
                       <div className="font-bold text-xl text-primary">
                         ${parseFloat(order.total).toFixed(2)}
                       </div>
+                      {order.totalInBolivares && (
+                        <div className="text-sm text-muted-foreground">
+                          Bs. {parseFloat(order.totalInBolivares).toLocaleString('es-VE', { 
+                            minimumFractionDigits: 2, 
+                            maximumFractionDigits: 2 
+                          })}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </CardHeader>
@@ -152,6 +215,90 @@ export default function AdminOrders() {
                   {order.notes && (
                     <div className="mt-3 p-3 bg-muted rounded-md">
                       <p className="text-sm"><strong>Notas:</strong> {order.notes}</p>
+                    </div>
+                  )}
+
+                  {/* Sección de Confirmación de Pago */}
+                  {(order.paymentBank || order.paymentCI || order.paymentPhone) && (
+                    <div className={`mt-4 p-4 rounded-md space-y-3 border ${
+                      order.paymentStatus === 'approved' 
+                        ? 'bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800' 
+                        : order.paymentStatus === 'rejected'
+                        ? 'bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800'
+                        : 'bg-muted border-border'
+                    }`}>
+                      <div className="flex items-center justify-between">
+                        <h4 className={`font-semibold ${
+                          order.paymentStatus === 'approved'
+                            ? 'text-green-900 dark:text-green-100'
+                            : order.paymentStatus === 'rejected'
+                            ? 'text-red-900 dark:text-red-100'
+                            : 'text-foreground'
+                        }`}>
+                          Datos de Confirmación de Pago
+                        </h4>
+                        <Select
+                          value={order.paymentStatus || 'pending'}
+                          onValueChange={(value) => {
+                            updatePaymentStatusMutation.mutate({
+                              id: order.id,
+                              paymentStatus: value,
+                            });
+                          }}
+                        >
+                          <SelectTrigger className="w-[180px]">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="pending">No confirmado</SelectItem>
+                            <SelectItem value="approved">Aprobado</SelectItem>
+                            <SelectItem value="rejected">Rechazado</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        {order.paymentBank && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Banco emisor:</span>
+                            <span className="font-medium">{getBankName(order.paymentBank)}</span>
+                          </div>
+                        )}
+                        {order.paymentCI && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Documento afiliado:</span>
+                            <span className="font-medium">{order.paymentCI}</span>
+                          </div>
+                        )}
+                        {order.paymentPhone && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Telefono afiliado:</span>
+                            <span className="font-medium">{order.paymentPhone}</span>
+                          </div>
+                        )}
+                        {order.totalInBolivares && (
+                          <div className={`flex justify-between pt-2 border-t ${
+                            order.paymentStatus === 'approved'
+                              ? 'border-green-200 dark:border-green-800'
+                              : order.paymentStatus === 'rejected'
+                              ? 'border-red-200 dark:border-red-800'
+                              : 'border-border'
+                          }`}>
+                            <span className="text-muted-foreground">Total en Bs.:</span>
+                            <span className={`font-bold text-lg ${
+                              order.paymentStatus === 'approved'
+                                ? 'text-green-700 dark:text-green-300'
+                                : order.paymentStatus === 'rejected'
+                                ? 'text-red-700 dark:text-red-300'
+                                : 'text-foreground'
+                            }`}>
+                              Bs. {parseFloat(order.totalInBolivares).toLocaleString('es-VE', { 
+                                minimumFractionDigits: 2, 
+                                maximumFractionDigits: 2 
+                              })}
+                            </span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   )}
                 </CardContent>
